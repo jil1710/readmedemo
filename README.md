@@ -1,1 +1,132 @@
-# readmedemo
+
+# <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbEexd6uALtO6V3yZmdcAMP_QTTQQXleXcwg&usqp=CAU" alt="drawing" width="80"/> .Net 7 Features
+
+- A major part of Microsoft’s “cloud-first” .NET 7 release in November, ASP.NET Core 7 brings powerful new tools to the web development framework to help developers create modern web applications. Built on top of the .NET Core runtime, ASP.NET Core 7 has everything you need to build cutting-edge web user interfaces and robust back-end services on Windows, Linux, and macOS alike..
+
+- This article discusses the biggest highlights in ASP.NET Core 7, and includes some code examples to get you started with the new features.
+
+## Let's see all the .Net 7 features with examples
+
+- ### **Output caching middleware :**
+    
+    ASP.NET Core 7 allows you to use output caching in all ASP.NET Core apps: Minimal API, MVC, Razor Pages, and Web API apps with controllers. To add the output caching middleware to the services collection, invoke the IServiceCollection.AddOutputCache extension method. To add the middleware to the request processing pipeline, call the IApplicationBuilder.UseOutputCache extension method.
+    
+    ![image](https://github.com/jil1710/readmedemo/assets/125335932/378d88b4-be13-4444-b694-cfdb1d7b8887)
+
+    Then, to add a caching layer to an endpoint, you can use the following code.
+
+    ![image](https://github.com/jil1710/readmedemo/assets/125335932/40b8cab6-cd95-4005-bbe7-f3d00528ae3f)
+
+
+    - Click here to see demo : [Output cache middleware](https://github.com/jil1710/dotnet7/tree/master/OutputcacheFeature)
+
+
+- ### **Rate-limiting middleware :**
+
+    Controlling the rate at which clients can make requests to endpoints is an important security measure that allows web applications to ward off malicious attacks. You can prevent denial-of-service attacks, for example, by limiting the number of requests coming from a single IP address in a given period of time. The term for this capability is rate limiting.
+
+    The Microsoft.AspNetCore.RateLimiting middleware in ASP.NET Core 7 can help you enforce rate limiting in your application. You can configure rate-limiting policies and then attach those policies to the endpoints.
+
+    You can use the rate-limiting middleware with ASP.NET Core Web API, ASP.NET Core MVC, and ASP.NET Core Minimal API apps. To get started using this built-in middleware, add the Microsoft.AspNetCore.RateLimiting NuGet package to your project by executing the following command at the Visual Studio command prompt.
+
+    ```
+        dotnet add package Microsoft.AspNetCore.RateLimiting
+    ```
+    
+    ![image](https://github.com/jil1710/readmedemo/assets/125335932/29b1af44-0719-432b-af0b-6c9cce67beae)
+
+    Then, to add a rate limiting to particular endpoint, you can use the following code.
+
+    ![image](https://github.com/jil1710/readmedemo/assets/125335932/f94fc7ad-6495-4ca3-bac9-a801c698c627)
+
+    - Click here to see demo : [Rate Limiting by IP address](https://github.com/jil1710/dotnet7/tree/master/RateLimitingFeature) 
+
+
+- ### **Request decompression middleware :**
+
+    ASP.NET Core 7 includes a new request decompression middleware that allows endpoints to accept requests that have compressed content. This eliminates the need to write code explicitly to decompress requests with compressed content. It works by using a Content-Encoding HTTP header to identify and decompress compressed content in HTTP requests.
+
+    In response to an HTTP request that matches the Content-Encoding header value, the middleware encapsulates the HttpRequest.Body in a suitable decompression stream using the matching provider. This is followed by the removal of the Content-Encoding header, which indicates that the request body is no longer compressed. Note that the request decompression middleware ignores requests without a Content-Encoding header.
+
+    The code snippet below shows how you can enable request decompression for the default Content-Encoding types.
+
+    ![image](https://github.com/jil1710/readmedemo/assets/125335932/f1ab1e4a-ab5b-466a-a908-ec32d696252b)
+
+    ![image](https://github.com/jil1710/readmedemo/assets/125335932/14980634-3f89-47e7-9ec8-c3f915fb04ee)
+
+    - Click here to see demo : [Request decompression middleware](https://github.com/jil1710/dotnet7/tree/master/RequestDecompressionMiddleware)
+
+
+- ### **Filters in minimal APIs :**
+
+    Filters let you execute code during certain stages in the request processing pipeline. A filter runs before or after the execution of an action method. You can take advantage of filters to track web page visits or validate the request parameters. By using filters, you can focus on the business logic of your application rather than on writing code for the cross-cutting concerns in your application.
+
+    An endpoint filter enables you to intercept, modify, short-circuit, and aggregate cross-cutting issues such as authorization, validation, and exception handling. The new IEndpointFilter interface in ASP.NET Core 7 lets us design filters and connect them to API endpoints. These filters may change request or response objects or short-circuit request processing. An endpoint filter can be invoked on actions and on route endpoints.
+
+    ![image](https://github.com/jil1710/readmedemo/assets/125335932/cc87a76e-b95f-4cfe-af58-e2d6c093eb6c)
+  
+    - Click here to see demo : [Filters in minimal APIs](https://github.com/jil1710/dotnet7/tree/master/FilterInMinimalApi)
+
+
+- ### **Parameter binding in action methods using DI :**
+
+    With ASP.NET Core 7, you can take advantage of dependency injection to bind parameters in the action methods of your API controllers. So, if the type is configured as a service, you no longer need to add the [FromServices] attribute to your method parameters. The following code snippet illustrates this.
+
+    ![image](https://github.com/jil1710/readmedemo/assets/125335932/5580a1d7-ac21-42ea-a443-8402498d34bd)
+
+    - Click here to see demo : [Parameter binding in action methods using DI](https://github.com/jil1710/dotnet7/tree/master/ParameterBindingServiceWithDI)
+
+
+- ### **Route groups in minimal APIs :**
+
+    With ASP.NET Core 7, you can leverage the new MapGroup extension method to organize groups of endpoints that share a common prefix in your minimal APIs. The MapGroup extension method not only reduces repetitive code, but also makes it easier to customize entire groups of endpoints.
+
+    The following code snippet shows how MapGroup can be used.
+
+    ```csharp
+        app.MapGroup("/public/authors")
+            .MapAuthorsApi()
+            .WithTags("Public");
+    ```
+
+    The next code snippet illustrates the MapAuthorsApi extension method.
+
+    ```csharp
+        public static class MyRouteBuilder
+        { 
+        public static RouteGroupBuilder MapAuthorsApi(this RouteGroupBuilder group)
+            {
+                group.MapGet("/", GetAllAuthors);
+                group.MapGet("/{id}", GetAuthor);
+                group.MapPost("/", CreateAuthor);
+                group.MapPut("/{id}", UpdateAuthor);
+                group.MapDelete("/{id}", DeleteAuthor);
+                return group;
+            }
+        }
+    ```
+
+    - Click here to see demo : [Route groups in minimal APIs](https://github.com/jil1710/dotnet7/tree/master/RouteGroupInMinimalApi)
+
+
+- ### **File uploads in minimal APIs :**
+
+    You can now use IFormFile and IFormFileCollection in minimal APIs to upload files in ASP.NET Core 7. The following code snippet illustrates how IFormFile can be used.
+
+    ![image](https://github.com/jil1710/readmedemo/assets/125335932/1f996cc9-6beb-40bb-b691-a57c140f6041)
+
+    If you want to upload multiple files, you can use the following piece of code instead.
+
+    ![image](https://github.com/jil1710/readmedemo/assets/125335932/6748811b-66cd-468d-a1a7-8d1c87b9ca83)
+
+    - Click here to see demo : [File uploads in minimal APIs](https://github.com/jil1710/dotnet7/tree/master/FileUploadInMinimalApi)
+
+
+    
+
+
+
+
+
+
+
