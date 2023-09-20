@@ -122,6 +122,34 @@
     - Click here to see demo : [File uploads in minimal APIs](https://github.com/jil1710/dotnet7/tree/master/FileUploadInMinimalApi)
 
 
+ - ### **JSON property names in validation errors :**
+
+    By default, when a validation error occurs, model validation produces a ModelStateDictionary with the property name as the error key. Some apps, such as single page apps, benefit from using JSON property names for validation errors generated from Web APIs. The following code configures validation to use the SystemTextJsonValidationMetadataProvider to use JSON property names:
+
+    ![image](https://github.com/jil1710/readmedemo/assets/125335932/757cf498-dc36-4d41-8cca-cfdc99e4416a)
+
+    - Click here to see demo : [JSON property names in validation errors](https://github.com/jil1710/dotnet7/tree/master/JsonPropertyNameInValidation)
+
+
+- ### **Bind arrays and string values from headers and query strings :**
+
+    In ASP.NET 7, binding query strings to an array of primitive types, string arrays, and StringValues is supported:
+
+    ```csharp
+        // Bind query string values to a primitive type array.
+        // GET  /tags?q=1&q=2&q=3
+        app.MapGet("/tags", (int[] q) => $"tag1: {q[0]} , tag2: {q[1]}, tag3: {q[2]}");
+
+        // Bind to a string array.
+        // GET /tags2?names=john&names=jack&names=jane
+        app.MapGet("/tags2", (string[] names) => $"tag1: {names[0]} , tag2: {names[1]}, tag3: {names[2]}");
+
+        // Bind to StringValues.
+        // GET /tags3?names=john&names=jack&names=jane
+        app.MapGet("/tags3", (StringValues names) => $"tag1: {names[0]} , tag2: {names[1]}, tag3: {names[2]}");
+    ```
+
+
     
 
 
