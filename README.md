@@ -149,6 +149,76 @@
         app.MapGet("/tags3", (StringValues names) => $"tag1: {names[0]} , tag2: {names[1]}, tag3: {names[2]}");
     ```
 
+## MVC and Razor pages
+
+- ### **Support for nullable models in MVC views and Razor Pages :**
+
+    Nullable page or view models are supported to improve the experience when using null state checking with ASP.NET Core apps:
+
+    ```csharp
+        @model Product?
+    ```
+
+## Servers and Runtime
+ 
+- Limit the rate of handled requests using flexible endpoint configuration and policies.
+- Configure caching for responses to handle requests more efficiently.
+- Accept requests with compressed content.
+- Built-in support for HTTP/3, the latest HTTP version based on the new QUIC multiplexed transport protocol.
+- Use WebSockets over HTTP/2 connections.
+- Create streams and datagrams over HTTP/3 with experimental support for WebTransport.
+
+## Performance Optimization
+- In the .NET 7-based application, you will analyze a boost to speed and performance. Microsoft has     released several performance-accelerating components in this version, which includes the following: 
+
+    - **OSR (On-Stack Replacement) :**
+
+        OSR helps in improving the code execution during runtime, as it allows the currently running process to change the methods in between. In addition, it also gets considered as a tiered compilation complement. Due to this, .NET developers prefer it for implementing method switching for extended or time-consuming processes.
+
+    - **PGO (Profile-guided Optimization) :**
+
+        This is the big deal in .NET 7.0. Dynamic PGO allows the JIT to use profiling data to change the way code is compiled in the background at runtime, meaning that the code’s execution performance will change as the JIT utilizes information collected as a single instance of an application runs.
+
+    In .NET 7, Microsoft allows you to run PGO and OSR simultaneously, which you can enable in only the following two steps: 
+
+    ```
+    Step 1: Open the project file. 
+    ```
+    ```
+    Step 2: Add the code: <TieredPGO>true</TieredPGO> and save the file. 
+    ```
+    Once you complete the PGO enablement, .NET 7 will improve the overall application performance.
+
+## Blazor Changes
+
+- Build standard HTML custom elements with Blazor to integrate Blazor components with any JavaScript-based application.
+- Intercept location changing events to create custom user experiences when navigating.
+- Run async logic after data binding and independently control how data binding gets and sets the data.
+- Create dynamic authentication requests at runtime with custom parameters to handle advanced authentication scenarios in Blazor WebAssembly apps.
+- Optimize JavaScript interop call on WebAssembly using the new [JSImport]/[JSExport] support for improvement.
+- Improve performance with .NET WebAssembly ahead-of-time (AOT) compilation using WebAssembly SIMD and exception handling support.
+
+
+## gRPC
+
+- gRPC JSON Transcoding support in .Net 7.
+ 
+    gRPC JSON transcoding is an extension for ASP.NET Core that creates RESTful JSON APIs for gRPC services. 
+    - ***gRPC JSON transcoding allows:***
+
+        - Apps to call gRPC services with familiar HTTP concepts.
+        - ASP.NET Core gRPC apps to support both gRPC and RESTful JSON APIs without replicating functionality.
+        - Experimental support for generating OpenAPI from transcoded RESTful APIs by integrating with Swashbuckle.
+    
+
+    .NET 7 gRPC performance now exceeds popular frameworks like Rust, Go and C++.
+
+    ![image](https://github.com/jil1710/readmedemo/assets/125335932/4f925c02-7a2a-4f2d-b4e1-25d5b863af80)
+
+
+    - [click here for more detail on gRPC with .net 7](https://medium.com/geekculture/build-high-performance-services-using-grpc-and-net7-7c0c434abbb0#:~:text=gRPC%20JSON%20Transcoding,-.&text=NET7%20provides%20an%20extension%20for,HTTP%20Verbs)
+
+
 
     
 
