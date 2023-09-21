@@ -55,6 +55,45 @@
 
     - Click here to see demo : [Interface Serialization](https://github.com/jil1710/dotnet8/tree/master/InterfaceSerialization) 
 
+- ### **Keyed service DI injection :**
+
+    With keyed services, another piece of information is stored with the ServiceDescriptor, a ServiceKey that identifies the service. The key can be any object, but it will commonly be a string or an enum (something that can be a constant so it can be used in attributes). For non-keyed services, the ServiceType identifies the registration; for keyed services, the combination of ServiceType and ServiceKey identifies the registration.
+
+    Keyed services are useful when you have an interface/service with multiple implementations that you want to use in your app. What's more, you need to use each of those implementations in different places in your app.
+
+    - **Without keyed services :**
+        Without keyed services, you could register all these services like this:
+
+
+
+    ```csharp
+        builder.Services.AddSingleton<INotificationService, SmsNotificationService>();
+        builder.Services.AddSingleton<INotificationService, EmailNotificationService>();
+        builder.Services.AddSingleton<INotificationService, PushNotificationService>();
+    ```
+
+     But you could retrieve only the last registered service (PushNotificationService) like this :
+
+     ```csharp
+        public class NotifierService(INotificationService service){}
+    ```
+
+    - **With keyed services :**
+        To register a keyed service, use one of the AddKeyedSingleton(), AddKeyedScoped(), or AddKeyedTransient() overloads, and provide an object as a key. In the following example I used a string, but you may want to use an enum or shared constants, for example:
+
+    ```csharp
+        builder.Services.AddKeyedSingleton<INotificationService, SmsNotificationService>("sms");
+        builder.Services.AddKeyedSingleton<INotificationService, EmailNotificationService>("email");
+        builder.Services.AddKeyedSingleton<INotificationService, PushNotificationService>("push");
+    ```
+
+    To retrive any service you want using `[FromkeyedService(object key)] just like belo:
+
+    ![image](https://github.com/jil1710/readmedemo/assets/125335932/43707a63-02d7-46ab-9665-10d90278f1c1)
+
+    - Click here to see demo : [Keyed Service DI injection](https://github.com/jil1710/dotnet8/tree/master/KeyedDIServices)
+
+
 
 - ### **List Best Practice in .net 8 :**
 
