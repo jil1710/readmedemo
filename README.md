@@ -1,222 +1,228 @@
 
-# <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbEexd6uALtO6V3yZmdcAMP_QTTQQXleXcwg&usqp=CAU" alt="drawing" width="80"/> .Net 7 Features
 
-- A major part of Microsoft’s “cloud-first” .NET 7 release in November, ASP.NET Core 7 brings powerful new tools to the web development framework to help developers create modern web applications. Built on top of the .NET Core runtime, ASP.NET Core 7 has everything you need to build cutting-edge web user interfaces and robust back-end services on Windows, Linux, and macOS alike..
+# <img src="https://github.com/jil1710/readmedemo/assets/125335932/0f20ab60-8575-408c-a861-1e0a9fd16a31" alt="drawing" width="100"/> What's new in .Net 8 Features
 
-- This article discusses the biggest highlights in ASP.NET Core 7, and includes some code examples to get you started with the new features.
+-  ASP.NET Core 8 has everything you need to build cutting-edge web user interfaces and robust back-end services on Windows, Linux, and macOS alike.Kindly note that to use .NET 8 in Visual Studio, we need to have a version of Visual Studio 2022 (v17.6 Preview 1) or a later version.
 
-## Let's see all the .Net 7 features with examples
+- .NET 8 is the successor to .NET 7. It will be supported for three years as a long-term support (LTS) release. You can download .NET 8 here. 
 
-- ### **Output caching middleware :**
+- This article discusses the biggest highlights in ASP.NET Core 8, and includes some code examples to get you started with the new features.
+
+## Let's see all the .Net 8 features with examples
+
+- ### **Frozen Dictionary Type :**
     
-    ASP.NET Core 7 allows you to use output caching in all ASP.NET Core apps: Minimal API, MVC, Razor Pages, and Web API apps with controllers. To add the output caching middleware to the services collection, invoke the IServiceCollection.AddOutputCache extension method. To add the middleware to the request processing pipeline, call the IApplicationBuilder.UseOutputCache extension method.
+    With .NET 8 we are introduced to a new dictionary type which improves the performance of read operations. The catch: you are not allowed to make any changes to the keys and values once the collection is created. This type is particularly useful for collections that are populated on first use and then persisted for the duration of a long-lived service.
     
-    ![image](https://github.com/jil1710/readmedemo/assets/125335932/378d88b4-be13-4444-b694-cfdb1d7b8887)
 
-    Then, to add a caching layer to an endpoint, you can use the following code.
+    ![image](https://github.com/jil1710/readmedemo/assets/125335932/f5e9d8c8-7ec5-4271-9351-81d54fd2c2b9)
 
-    ![image](https://github.com/jil1710/readmedemo/assets/125335932/40b8cab6-cd95-4005-bbe7-f3d00528ae3f)
+    ![image](https://github.com/jil1710/readmedemo/assets/125335932/311515ec-10ac-4d0f-8d2f-9b8e4002447a)
 
-
-    - Click here to see demo : [Output cache middleware](https://github.com/jil1710/dotnet7/tree/master/OutputcacheFeature)
+    - Click here to see demo : [Frozen Dictionary Type](https://github.com/jil1710/dotnet8/tree/master/FrozenDictionaryType)
 
 
-- ### **Rate-limiting middleware :**
+- ### **Interface Serialization :**
 
-    Controlling the rate at which clients can make requests to endpoints is an important security measure that allows web applications to ward off malicious attacks. You can prevent denial-of-service attacks, for example, by limiting the number of requests coming from a single IP address in a given period of time. The term for this capability is rate limiting.
+    .NET 8 adds support for serializing properties from interface hierarchies.
 
-    The Microsoft.AspNetCore.RateLimiting middleware in ASP.NET Core 7 can help you enforce rate limiting in your application. You can configure rate-limiting policies and then attach those policies to the endpoints.
-
-    You can use the rate-limiting middleware with ASP.NET Core Web API, ASP.NET Core MVC, and ASP.NET Core Minimal API apps. To get started using this built-in middleware, add the Microsoft.AspNetCore.RateLimiting NuGet package to your project by executing the following command at the Visual Studio command prompt.
-
-    ```
-        dotnet add package Microsoft.AspNetCore.RateLimiting
-    ```
-    
-    ![image](https://github.com/jil1710/readmedemo/assets/125335932/29b1af44-0719-432b-af0b-6c9cce67beae)
-
-    Then, to add a rate limiting to particular endpoint, you can use the following code.
-
-    ![image](https://github.com/jil1710/readmedemo/assets/125335932/f94fc7ad-6495-4ca3-bac9-a801c698c627)
-
-    - Click here to see demo : [Rate Limiting by IP address](https://github.com/jil1710/dotnet7/tree/master/RateLimitingFeature) 
-
-
-- ### **Request decompression middleware :**
-
-    ASP.NET Core 7 includes a new request decompression middleware that allows endpoints to accept requests that have compressed content. This eliminates the need to write code explicitly to decompress requests with compressed content. It works by using a Content-Encoding HTTP header to identify and decompress compressed content in HTTP requests.
-
-    In response to an HTTP request that matches the Content-Encoding header value, the middleware encapsulates the HttpRequest.Body in a suitable decompression stream using the matching provider. This is followed by the removal of the Content-Encoding header, which indicates that the request body is no longer compressed. Note that the request decompression middleware ignores requests without a Content-Encoding header.
-
-    The code snippet below shows how you can enable request decompression for the default Content-Encoding types.
-
-    ![image](https://github.com/jil1710/readmedemo/assets/125335932/f1ab1e4a-ab5b-466a-a908-ec32d696252b)
-
-    ![image](https://github.com/jil1710/readmedemo/assets/125335932/14980634-3f89-47e7-9ec8-c3f915fb04ee)
-
-    - Click here to see demo : [Request decompression middleware](https://github.com/jil1710/dotnet7/tree/master/RequestDecompressionMiddleware)
-
-
-- ### **Filters in minimal APIs :**
-
-    Filters let you execute code during certain stages in the request processing pipeline. A filter runs before or after the execution of an action method. You can take advantage of filters to track web page visits or validate the request parameters. By using filters, you can focus on the business logic of your application rather than on writing code for the cross-cutting concerns in your application.
-
-    An endpoint filter enables you to intercept, modify, short-circuit, and aggregate cross-cutting issues such as authorization, validation, and exception handling. The new IEndpointFilter interface in ASP.NET Core 7 lets us design filters and connect them to API endpoints. These filters may change request or response objects or short-circuit request processing. An endpoint filter can be invoked on actions and on route endpoints.
-
-    ![image](https://github.com/jil1710/readmedemo/assets/125335932/cc87a76e-b95f-4cfe-af58-e2d6c093eb6c)
-  
-    - Click here to see demo : [Filters in minimal APIs](https://github.com/jil1710/dotnet7/tree/master/FilterInMinimalApi)
-
-
-- ### **Parameter binding in action methods using DI :**
-
-    With ASP.NET Core 7, you can take advantage of dependency injection to bind parameters in the action methods of your API controllers. So, if the type is configured as a service, you no longer need to add the [FromServices] attribute to your method parameters. The following code snippet illustrates this.
-
-    ![image](https://github.com/jil1710/readmedemo/assets/125335932/5580a1d7-ac21-42ea-a443-8402498d34bd)
-
-    - Click here to see demo : [Parameter binding in action methods using DI](https://github.com/jil1710/dotnet7/tree/master/ParameterBindingServiceWithDI)
-
-
-- ### **Route groups in minimal APIs :**
-
-    With ASP.NET Core 7, you can leverage the new MapGroup extension method to organize groups of endpoints that share a common prefix in your minimal APIs. The MapGroup extension method not only reduces repetitive code, but also makes it easier to customize entire groups of endpoints.
-
-    The following code snippet shows how MapGroup can be used.
+    The following code shows an example where the properties from both the immediately implemented interface and its base interface are serialized.
 
     ```csharp
-        app.MapGroup("/public/authors")
-            .MapAuthorsApi()
-            .WithTags("Public");
-    ```
 
-    The next code snippet illustrates the MapAuthorsApi extension method.
+        IDerived value = new DerivedImplement { Base = 0, Derived = 1 };
+        JsonSerializer.Serialize(value); // {"Base":0,"Derived":1}
 
-    ```csharp
-        public static class MyRouteBuilder
-        { 
-        public static RouteGroupBuilder MapAuthorsApi(this RouteGroupBuilder group)
-            {
-                group.MapGet("/", GetAllAuthors);
-                group.MapGet("/{id}", GetAuthor);
-                group.MapPost("/", CreateAuthor);
-                group.MapPut("/{id}", UpdateAuthor);
-                group.MapDelete("/{id}", DeleteAuthor);
-                return group;
-            }
+        public interface IBase
+        {
+            public int Base { get; set; }
         }
-    ```
 
-    - Click here to see demo : [Route groups in minimal APIs](https://github.com/jil1710/dotnet7/tree/master/RouteGroupInMinimalApi)
+        public interface IDerived : IBase
+        {
+            public int Derived { get; set; }
+        }
 
-
-- ### **File uploads in minimal APIs :**
-
-    You can now use IFormFile and IFormFileCollection in minimal APIs to upload files in ASP.NET Core 7. The following code snippet illustrates how IFormFile can be used.
-
-    ![image](https://github.com/jil1710/readmedemo/assets/125335932/1f996cc9-6beb-40bb-b691-a57c140f6041)
-
-    If you want to upload multiple files, you can use the following piece of code instead.
-
-    ![image](https://github.com/jil1710/readmedemo/assets/125335932/6748811b-66cd-468d-a1a7-8d1c87b9ca83)
-
-    - Click here to see demo : [File uploads in minimal APIs](https://github.com/jil1710/dotnet7/tree/master/FileUploadInMinimalApi)
-
-
- - ### **JSON property names in validation errors :**
-
-    By default, when a validation error occurs, model validation produces a ModelStateDictionary with the property name as the error key. Some apps, such as single page apps, benefit from using JSON property names for validation errors generated from Web APIs. The following code configures validation to use the SystemTextJsonValidationMetadataProvider to use JSON property names:
-
-    ![image](https://github.com/jil1710/readmedemo/assets/125335932/757cf498-dc36-4d41-8cca-cfdc99e4416a)
-
-    - Click here to see demo : [JSON property names in validation errors](https://github.com/jil1710/dotnet7/tree/master/JsonPropertyNameInValidation)
-
-
-- ### **Bind arrays and string values from headers and query strings :**
-
-    In ASP.NET 7, binding query strings to an array of primitive types, string arrays, and StringValues is supported:
-
-    ```csharp
-        // Bind query string values to a primitive type array.
-        // GET  /tags?q=1&q=2&q=3
-        app.MapGet("/tags", (int[] q) => $"tag1: {q[0]} , tag2: {q[1]}, tag3: {q[2]}");
-
-        // Bind to a string array.
-        // GET /tags2?names=john&names=jack&names=jane
-        app.MapGet("/tags2", (string[] names) => $"tag1: {names[0]} , tag2: {names[1]}, tag3: {names[2]}");
-
-        // Bind to StringValues.
-        // GET /tags3?names=john&names=jack&names=jane
-        app.MapGet("/tags3", (StringValues names) => $"tag1: {names[0]} , tag2: {names[1]}, tag3: {names[2]}");
-    ```
-
-## MVC and Razor pages
-
-- ### **Support for nullable models in MVC views and Razor Pages :**
-
-    Nullable page or view models are supported to improve the experience when using null state checking with ASP.NET Core apps:
-
-    ```csharp
-        @model Product?
-    ```
-
-## Servers and Runtime
- 
-- Limit the rate of handled requests using flexible endpoint configuration and policies.
-- Configure caching for responses to handle requests more efficiently.
-- Accept requests with compressed content.
-- Built-in support for HTTP/3, the latest HTTP version based on the new QUIC multiplexed transport protocol.
-- Use WebSockets over HTTP/2 connections.
-- Create streams and datagrams over HTTP/3 with experimental support for WebTransport.
-
-## Performance Optimization
-- In the .NET 7-based application, you will analyze a boost to speed and performance. Microsoft has     released several performance-accelerating components in this version, which includes the following: 
-
-    - **OSR (On-Stack Replacement) :**
-
-        OSR helps in improving the code execution during runtime, as it allows the currently running process to change the methods in between. In addition, it also gets considered as a tiered compilation complement. Due to this, .NET developers prefer it for implementing method switching for extended or time-consuming processes.
-
-    - **PGO (Profile-guided Optimization) :**
-
-        This is the big deal in .NET 7.0. Dynamic PGO allows the JIT to use profiling data to change the way code is compiled in the background at runtime, meaning that the code’s execution performance will change as the JIT utilizes information collected as a single instance of an application runs.
-
-    In .NET 7, Microsoft allows you to run PGO and OSR simultaneously, which you can enable in only the following two steps: 
+        public class DerivedImplement : IDerived
+        {
+            public int Base { get; set; }
+            public int Derived { get; set; }
+        }
 
     ```
-    Step 1: Open the project file. 
-    ```
-    ```
-    Step 2: Add the code: <TieredPGO>true</TieredPGO> and save the file. 
-    ```
-    Once you complete the PGO enablement, .NET 7 will improve the overall application performance.
 
-## Blazor Changes
-
-- Build standard HTML custom elements with Blazor to integrate Blazor components with any JavaScript-based application.
-- Intercept location changing events to create custom user experiences when navigating.
-- Run async logic after data binding and independently control how data binding gets and sets the data.
-- Create dynamic authentication requests at runtime with custom parameters to handle advanced authentication scenarios in Blazor WebAssembly apps.
-- Optimize JavaScript interop call on WebAssembly using the new [JSImport]/[JSExport] support for improvement.
-- Improve performance with .NET WebAssembly ahead-of-time (AOT) compilation using WebAssembly SIMD and exception handling support.
+    - Click here to see demo : [Interface Serialization](https://github.com/jil1710/dotnet8/tree/master/InterfaceSerialization) 
 
 
-## gRPC
+- ### **List Best Practice in .net 8 :**
 
-- gRPC JSON Transcoding support in .Net 7.
- 
-    gRPC JSON transcoding is an extension for ASP.NET Core that creates RESTful JSON APIs for gRPC services. 
-    - ***gRPC JSON transcoding allows:***
+    Let's understand it by example suppose you create one function that fetch List of User and return it, if User is empty you return `new List<User>()` that will cause memory and issue in perfomance. Instead we use .net 8 new feature to handle this case without affecting the perfomance. Let's dive into example below:
 
-        - Apps to call gRPC services with familiar HTTP concepts.
-        - ASP.NET Core gRPC apps to support both gRPC and RESTful JSON APIs without replicating functionality.
-        - Experimental support for generating OpenAPI from transcoded RESTful APIs by integrating with Swashbuckle.
+    ![image](https://github.com/jil1710/readmedemo/assets/125335932/f92decf5-4b05-4568-9f2c-d8bef612d184)
+
+    ![benchmark](https://github.com/jil1710/readmedemo/assets/125335932/2f85eee0-3bb4-4230-9d5f-0a99fed54689)
+
+    - Click here to see demo : [List Best Practice](https://github.com/jil1710/dotnet8/tree/master/ListBestPracticesInDotnet8)
+
+
+- ### **New in System.Text.Json :**
+
+    There are a lot of exciting updates for developers in System.Text.Json in .NET 8. In this release, we have substantially improved the user experience when using the library in Native AOT applications, as well as delivering a number of highly requested features and reliability enhancements. These include support for populating read-only members, customizable unmapped member handling, support for interface hierarchies, snake case and kebab case naming policies and much more.
+
+    -  **JsonStringEnumConverter<TEnum> :**
+        The JsonStringEnumConverter class is the API of choice for users looking to serialize enum types as string values. 
+        ```csharp
+            [JsonConverter(typeof(JsonStringEnumConverter<MyEnum>))]
+            public enum MyEnum { Value1, Value2, Value3 }
+        ```
+
+    - **Populate read-only members :**
+        You can now deserialize onto read-only fields or properties (that is, those that don't have a set accessor).
+
+        Consider the following example:
+
+        ```csharp
+            MyPoco result = JsonSerializer.Deserialize<MyPoco>("""{ "Values" : [1,2,3], "Person" : { "Name" : "Brian" } }""");
+            Console.WriteLine(result.Values.Count); // 3
+            Console.WriteLine(result.Person.Name); // Brian
+
+            [JsonObjectCreationHandling(JsonObjectCreationHandling.Populate)]
+            public class MyPoco
+            {
+                public IList<int> Values { get; } = new List<int>();
+
+                public Person Person { get; } = new();
+            }
+
+            public class Person
+            {
+                public string Name { get; set; }
+            }
+        
+        ```
+
+    - **Naming Policy :**
+        JsonNamingPolicy includes new naming policies for snake_case (with an underscore) and kebab-case (with a hyphen) property name conversions.
+        
+        ```csharp
+            var options = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower };
+            JsonSerializer.Serialize(new { PropertyName = "value" }, options); // { "property_name" : "value" }
+        ```
+
+    - **Non Public Members :**
+        The JsonIncludeAttribute and JsonConstructorAttribute are annotations that let users opt specific members into the serialization contract for a given type (properties/fields and constructors respectively). Until now these were limited to public members, but this has now been relaxed to include non-public members:
+
+        ```csharp
+
+            string json = JsonSerializer.Serialize(new MyPoco(42)); // {"X":42}
+            JsonSerializer.Deserialize<MyPoco>(json);
+
+            public class MyPoco
+            {
+                [JsonConstructor]
+                internal MyPoco(int x) => X = x;
+
+                [JsonInclude]
+                internal int X { get; }
+            }
+        ```
+
+      ![image](https://github.com/jil1710/readmedemo/assets/125335932/45150c97-41b3-4688-a349-e3de9338aa6b)
+
+    - Click here to see demo : [New in System.Json.Text](https://github.com/jil1710/dotnet8/tree/master/New.In.System.text.Json)
+
+    - Click here to explore more in advanced : [What's new in System.Json.Text](https://devblogs.microsoft.com/dotnet/system-text-json-in-dotnet-8/)
+
+
+- ### **Improvement in random :**
+
+    The System.Random and System.Security.Cryptography.RandomNumberGenerator types introduce two new methods for working with randomness.
+
+    - `GetItems<T>` :
+        This methods let you randomly choose a specified number of items from an input set. The following example shows how to use System.Random.GetItems<T>() to randomly insert 31 items into an array.
     
+        ```csharp
+            private static ReadOnlySpan<Button> s_allButtons = new[]
+            {
+                Button.Red,
+                Button.Green,
+                Button.Blue,
+                Button.Yellow,
+            };
 
-    .NET 7 gRPC performance now exceeds popular frameworks like Rust, Go and C++.
+            // ...
 
-    ![image](https://github.com/jil1710/readmedemo/assets/125335932/4f925c02-7a2a-4f2d-b4e1-25d5b863af80)
+            Button[] thisRound = Random.Shared.GetItems(s_allButtons, 31);
+        ```
+
+    - `Shuffle<T>` : 
+        This method help us to shuffle the items into list, basically These methods are useful for reducing training bias in machine learning (so the first thing isn't always training, and the last thing always test).
+
+        ```csharp
+            YourType[] trainingData = LoadTrainingData();
+            Random.Shared.Shuffle(trainingData);
+        ```
+
+    - Click here to see demo : [Improvement in Random](https://github.com/jil1710/dotnet8/tree/master/RandomImprovements)
 
 
-    - [click here for more detail on gRPC with .net 7](https://medium.com/geekculture/build-high-performance-services-using-grpc-and-net7-7c0c434abbb0#:~:text=gRPC%20JSON%20Transcoding,-.&text=NET7%20provides%20an%20extension%20for,HTTP%20Verbs)
+- ### **Authentication change in .net 8 :**
+
+    From .net 8 Authentication made simple using `app.MapIndentity<T>()` we can move forward it will automatically create `/register`, `/login`, `/refresh-token` etc....
+
+    The following code snippet shows how MapIndentity<T> can be used.
+
+    ![image](https://github.com/jil1710/readmedemo/assets/125335932/c187bea9-44d8-4218-9bb8-a7cdc0910f1c)
+
+    ![image](https://github.com/jil1710/readmedemo/assets/125335932/622f37f4-a824-46dc-9a80-d46b9665906e)
+
+
+
+    - Click here to see demo : [Authentication change in .net 8](https://github.com/jil1710/dotnet8/tree/master/AuthChangeInDotNet8)
+
+
+- ### **Background Tasks improve :**
+
+   Hosted services now have more options for execution during the application lifecycle. Microsoft.Extensions.Hosting.IHostedService provided StartAsync and StopAsync, and now Microsoft.Extensions.Hosting.IHostedLifecycleService provides these additional methods:
+
+    - Microsoft.Extensions.Hosting.IHostedLifecycleService.StartingAsync(System.Threading.CancellationToken)
+    - Microsoft.Extensions.Hosting.IHostedLifecycleService.StartedAsync(System.Threading.CancellationToken)
+    - Microsoft.Extensions.Hosting.IHostedLifecycleService.StoppingAsync(System.Threading.CancellationToken)
+    - Microsoft.Extensions.Hosting.IHostedLifecycleService.StoppedAsync(System.Threading.CancellationToken)
+
+    These methods run before and after the existing points respectively.
+  
+    - IHostedService example
+
+      ![image](https://github.com/jil1710/readmedemo/assets/125335932/0682bb23-5473-4af0-ad0d-25e208f9f5e3)
+
+    - IHostedLifecycleService example which has application lifecycle
+ 
+      ![image](https://github.com/jil1710/readmedemo/assets/125335932/ff6bf254-feb3-4cc2-b8e8-30e2bf22080c)
+
+    - Click here to see demo : [Background Tasks improve](https://github.com/jil1710/dotnet8/tree/master/BackgroundTaskFixedInDotnet8)
+
+
+- ### **Builtin Guard Clause :**
+
+    As C# 12 is release with .Net 8 reference so in .Net 8 we have built in guard clause that help us in code minimization and perfomance improve:
+
+    ![image](https://github.com/jil1710/readmedemo/assets/125335932/85234179-cf11-494d-8992-f22f0bb22f8d)
+
+    - Click here to see demo : [Builtin Guard Types](https://github.com/jil1710/dotnet8/tree/master/BuiltInGuardClauses)
+
+
+- ### **TimeProvider Abstract class :**
+
+    In ASP.NET 8, new abstract class is introduce that will give system time with accurate precidence:
+
+    ```csharp
+        // Get system time.
+        DateTimeOffset utcNow = TimeProvider.System.GetUtcNow();
+        DateTimeOffset localNow = TimeProvider.System.GetLocalNow();
+    ```
+
+    - Click here to see demo : [TimeProvider Abstract class](https://github.com/jil1710/dotnet8/tree/master/TimeProviderClass)
 
 
 
