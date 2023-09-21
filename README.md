@@ -207,6 +207,26 @@
     - Click here to see demo : [Improvement in Random](https://github.com/jil1710/dotnet8/tree/master/RandomImprovements)
 
 
+- ### **Replacing the call with Interceptor  in .net 8 :**
+
+    Interceptors are an interesting new experimental feature coming in C#12 and .Net 8 that allow you to replace (or "intercept") a method call in your application with an alternative method. When your app is compiled, the compiler automatically "swaps out" the call to the original method with your substitute.
+
+    ![image](https://github.com/jil1710/readmedemo/assets/125335932/ef644b79-8ec8-423d-92bb-50a653cd6bf4)
+
+    ![image](https://github.com/jil1710/readmedemo/assets/125335932/6f5a74c2-9dd3-42d4-8ff0-a80ae65c5371)
+
+    Output :
+
+    ![image](https://github.com/jil1710/readmedemo/assets/125335932/81f82dfd-2fee-4b0b-91aa-a08e9f31fbef)
+
+    Add this two properties in Project File :
+
+    ![image](https://github.com/jil1710/readmedemo/assets/125335932/fd93c4b4-9323-4ae5-ac28-2ee96ce59e91)
+
+
+    - Click here to see demo : [Replacing the call with Interceptor  in .net 8](https://github.com/jil1710/dotnet8/tree/master/ReplaceMethodCallWithInterseptor)
+
+
 - ### **Authentication change in .net 8 :**
 
     From .net 8 Authentication made simple using `app.MapIndentity<T>()` we can move forward it will automatically create `/register`, `/login`, `/refresh-token` etc....
@@ -216,7 +236,6 @@
     ![image](https://github.com/jil1710/readmedemo/assets/125335932/c187bea9-44d8-4218-9bb8-a7cdc0910f1c)
 
     ![image](https://github.com/jil1710/readmedemo/assets/125335932/622f37f4-a824-46dc-9a80-d46b9665906e)
-
 
 
     - Click here to see demo : [Authentication change in .net 8](https://github.com/jil1710/dotnet8/tree/master/AuthChangeInDotNet8)
