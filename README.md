@@ -264,6 +264,15 @@
     ```
 
     - Click here to see demo : [TimeProvider Abstract class](https://github.com/jil1710/dotnet8/tree/master/TimeProviderClass)
+ 
+- ### **Form Binding in minimal Api :**
+
+    In ASP.NET 8, Form binding with complem type optimize and add stop automatic validation of anti forgery token by using middleware `DisableAntiforgery()`:
+
+    ![image](https://github.com/jil1710/readmedemo/assets/125335932/582b4bff-4629-4a4b-a6bd-7694f82ee04a)
+
+
+    - Click here to see demo : [Form Binding in minimal Api](https://github.com/jil1710/dotnet8/tree/master/FormBindingInMinimalApi)
 
 
 
