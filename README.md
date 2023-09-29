@@ -1,297 +1,91 @@
 
+<img src="https://github.com/jil1710/readmedemo/assets/125335932/76e579f2-1a7a-481e-9e0a-9530ba68543d" width="150" height="150"/>
 
-# <img src="https://github.com/jil1710/readmedemo/assets/125335932/0f20ab60-8575-408c-a861-1e0a9fd16a31" alt="drawing" width="100"/> What's new in .Net 8 Features
 
--  ASP.NET Core 8 has everything you need to build cutting-edge web user interfaces and robust back-end services on Windows, Linux, and macOS alike.Kindly note that to use .NET 8 in Visual Studio, we need to have a version of Visual Studio 2022 (v17.6 Preview 1) or a later version.
+# Azure Event Hub
 
-- .NET 8 is the successor to .NET 7. It will be supported for three years as a long-term support (LTS) release. You can download .NET 8 here. 
+- Event Hub is an Azure service that enables in processing large amounts of event data from connected devices and applications. Event Hub is a subscription based publish-subscribe data processor and analyzer services, which enables in collecting data from events and transforming that data into analytical data. It is used in applications specifically those built for internet of things (IoT) or big data systems.
 
-- This article discusses the biggest highlights in ASP.NET Core 8, and includes some code examples to get you started with the new features.
+- Azure Event Hubs are designed for big data ingestion from a different variety of sources such as social data, web apps, sensor data, weather data, IoT devices, etc.
 
-## Let's see all the .Net 8 features with examples
+-  We can choose to capture all incoming data in Azure Storage, or we can also decide to trigger Azure Functions in response to new events.
 
-- ### **Frozen Dictionary Type :**
+
+# Event Hubs Architecture
+
+  ![image](https://github.com/jil1710/readmedemo/assets/125335932/b7356d1b-bd4c-4d5c-9b29-8a44fc50241f)
+
+- **Event producers :** Any object that sends an event to an event hub.
+- **Partitions :** we can only read a particular subset, or segment, of the message stream.
+- **Consumer groups :** The data can be used by different consumers according to their own requirements. Some consumers want to use it carefully only once, some consumers used historical data again and again.
+- **Throughput units :** Throughput units are the foundation of how you can scale the traffic coming in and going out of Azure Event Hubs.
+- **Event receivers :** Any object (applications) that read event data from an Azure Event Hub is a receiver.
+
+
+# Use Case of Event Hub
+
+- Where we need to integrate/coordinate/receive millions of things (IoT Internet of Things), for example receive messages from millions of sensors, coordinate messages among thousands of trains or taxis and what not, send millions of logging messages to the cloud (on-premise tracking, monitoring or advertising centralization and more).
+- Where we need to collect audit data from devices in the field.
+- To collect the GPS locations of devices.
+
+
+## Let's implement Azure Event Hub using ASP.Net core
+
+- **Step 1 :** 
     
-    With .NET 8 we are introduced to a new dictionary type which improves the performance of read operations. The catch: you are not allowed to make any changes to the keys and values once the collection is created. This type is particularly useful for collections that are populated on first use and then persisted for the duration of a long-lived service.
-    
+    Create Event hub namespace after that create event hub under selected namespace then redirect to access key section and copy the connection string to communicate with hub from user end application.
 
-    ![image](https://github.com/jil1710/readmedemo/assets/125335932/f5e9d8c8-7ec5-4271-9351-81d54fd2c2b9)
+- **Step 2 :**
 
-    ![image](https://github.com/jil1710/readmedemo/assets/125335932/311515ec-10ac-4d0f-8d2f-9b8e4002447a)
-
-    ![image](https://github.com/jil1710/readmedemo/assets/125335932/bc8125c0-7600-42dd-86ec-48c0683297e2)
-
-    - Click here to see demo : [Frozen Dictionary Type](https://github.com/jil1710/dotnet8/tree/master/FrozenDictionaryType)
-
-
-- ### **Interface Serialization :**
-
-    .NET 8 adds support for serializing properties from interface hierarchies.
-
-    The following code shows an example where the properties from both the immediately implemented interface and its base interface are serialized.
+    Download the below nuget package in order to start with azure event hub.
 
     ```csharp
-
-        IDerived value = new DerivedImplement { Base = 0, Derived = 1 };
-        JsonSerializer.Serialize(value); // {"Base":0,"Derived":1}
-
-        public interface IBase
-        {
-            public int Base { get; set; }
-        }
-
-        public interface IDerived : IBase
-        {
-            public int Derived { get; set; }
-        }
-
-        public class DerivedImplement : IDerived
-        {
-            public int Base { get; set; }
-            public int Derived { get; set; }
-        }
-
+        Azure.Messaging.EventHubs
     ```
 
-    - Click here to see demo : [Interface Serialization](https://github.com/jil1710/dotnet8/tree/master/InterfaceSerialization) 
+- Here we are creating producer who is responsible for producing event to event hub and on the other hand consumer consume the event and process it.
 
-- ### **Keyed service DI injection :**
+- **Let's Create Producer that send the event to event hub :**
 
-    With keyed services, another piece of information is stored with the ServiceDescriptor, a ServiceKey that identifies the service. The key can be any object, but it will commonly be a string or an enum (something that can be a constant so it can be used in attributes). For non-keyed services, the ServiceType identifies the registration; for keyed services, the combination of ServiceType and ServiceKey identifies the registration.
+    `EventHubProducerClient` help us to connect .net application with azure event hub in order to post the event. After that we can create batch event and post the event.
 
-    Keyed services are useful when you have an interface/service with multiple implementations that you want to use in your app. What's more, you need to use each of those implementations in different places in your app.
+    ![image](https://github.com/jil1710/readmedemo/assets/125335932/0d44bd12-da0b-4c11-bbb2-a9f36334b3f0)
 
-    - **Without keyed services :**
-        Without keyed services, you could register all these services like this:
 
+- **Let's Create Consumer that consume the events from event hub :**
 
+  `EventHubConsumerClient` help us to consume the event using .net application from azure event hub. After that we process the event according to our needs.
 
-    ```csharp
-        builder.Services.AddSingleton<INotificationService, SmsNotificationService>();
-        builder.Services.AddSingleton<INotificationService, EmailNotificationService>();
-        builder.Services.AddSingleton<INotificationService, PushNotificationService>();
-    ```
+  ![image](https://github.com/jil1710/readmedemo/assets/125335932/3c3ff554-e77d-4b52-8542-055d0f3af703)
 
-     But you could retrieve only the last registered service (PushNotificationService) like this :
+- This is the simple demo console application how to use Event hub using C# and produce and consume the event. In order to use the above example using ASP.Net Core DI Injection we can register using below snippet :
 
-     ```csharp
-        public class NotifierService(INotificationService service){}
-    ```
-
-    - **With keyed services :**
-        To register a keyed service, use one of the AddKeyedSingleton(), AddKeyedScoped(), or AddKeyedTransient() overloads, and provide an object as a key. In the following example I used a string, but you may want to use an enum or shared constants, for example:
-
-    ```csharp
-        builder.Services.AddKeyedSingleton<INotificationService, SmsNotificationService>("sms");
-        builder.Services.AddKeyedSingleton<INotificationService, EmailNotificationService>("email");
-        builder.Services.AddKeyedSingleton<INotificationService, PushNotificationService>("push");
-    ```
-
-    To retrive any service you want using `[FromkeyedService(object key)] just like belo:
-
-    ![image](https://github.com/jil1710/readmedemo/assets/125335932/43707a63-02d7-46ab-9665-10d90278f1c1)
-
-    - Click here to see demo : [Keyed Service DI injection](https://github.com/jil1710/dotnet8/tree/master/KeyedDIServices)
-
-
-
-- ### **List Best Practice in .net 8 :**
-
-    Let's understand it by example suppose you create one function that fetch List of User and return it, if User is empty you return `new List<User>()` that will cause memory and issue in perfomance. Instead we use .net 8 new feature to handle this case without affecting the perfomance. Let's dive into example below:
-
-    ![image](https://github.com/jil1710/readmedemo/assets/125335932/f92decf5-4b05-4568-9f2c-d8bef612d184)
-
-    ![benchmark](https://github.com/jil1710/readmedemo/assets/125335932/2f85eee0-3bb4-4230-9d5f-0a99fed54689)
-
-    - Click here to see demo : [List Best Practice](https://github.com/jil1710/dotnet8/tree/master/ListBestPracticesInDotnet8)
-
-
-- ### **New in System.Text.Json :**
-
-    There are a lot of exciting updates for developers in System.Text.Json in .NET 8. In this release, we have substantially improved the user experience when using the library in Native AOT applications, as well as delivering a number of highly requested features and reliability enhancements. These include support for populating read-only members, customizable unmapped member handling, support for interface hierarchies, snake case and kebab case naming policies and much more.
-
-    -  **JsonStringEnumConverter<TEnum> :**
-        The JsonStringEnumConverter class is the API of choice for users looking to serialize enum types as string values. 
-        ```csharp
-            [JsonConverter(typeof(JsonStringEnumConverter<MyEnum>))]
-            public enum MyEnum { Value1, Value2, Value3 }
-        ```
-
-    - **Populate read-only members :**
-        You can now deserialize onto read-only fields or properties (that is, those that don't have a set accessor).
-
-        Consider the following example:
-
-        ```csharp
-            MyPoco result = JsonSerializer.Deserialize<MyPoco>("""{ "Values" : [1,2,3], "Person" : { "Name" : "Brian" } }""");
-            Console.WriteLine(result.Values.Count); // 3
-            Console.WriteLine(result.Person.Name); // Brian
-
-            [JsonObjectCreationHandling(JsonObjectCreationHandling.Populate)]
-            public class MyPoco
-            {
-                public IList<int> Values { get; } = new List<int>();
-
-                public Person Person { get; } = new();
-            }
-
-            public class Person
-            {
-                public string Name { get; set; }
-            }
-        
-        ```
-
-    - **Naming Policy :**
-        JsonNamingPolicy includes new naming policies for snake_case (with an underscore) and kebab-case (with a hyphen) property name conversions.
-        
-        ```csharp
-            var options = new JsonSerializerOptions { PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower };
-            JsonSerializer.Serialize(new { PropertyName = "value" }, options); // { "property_name" : "value" }
-        ```
-
-    - **Non Public Members :**
-        The JsonIncludeAttribute and JsonConstructorAttribute are annotations that let users opt specific members into the serialization contract for a given type (properties/fields and constructors respectively). Until now these were limited to public members, but this has now been relaxed to include non-public members:
-
-        ```csharp
-
-            string json = JsonSerializer.Serialize(new MyPoco(42)); // {"X":42}
-            JsonSerializer.Deserialize<MyPoco>(json);
-
-            public class MyPoco
-            {
-                [JsonConstructor]
-                internal MyPoco(int x) => X = x;
-
-                [JsonInclude]
-                internal int X { get; }
-            }
-        ```
-
-      ![image](https://github.com/jil1710/readmedemo/assets/125335932/45150c97-41b3-4688-a349-e3de9338aa6b)
-
-    - Click here to see demo : [New in System.Json.Text](https://github.com/jil1710/dotnet8/tree/master/New.In.System.text.Json)
-
-    - Click here to explore more in advanced : [What's new in System.Json.Text](https://devblogs.microsoft.com/dotnet/system-text-json-in-dotnet-8/)
-
-
-- ### **Improvement in random :**
-
-    The System.Random and System.Security.Cryptography.RandomNumberGenerator types introduce two new methods for working with randomness.
-
-    - `GetItems<T>` :
-        This methods let you randomly choose a specified number of items from an input set. The following example shows how to use System.Random.GetItems<T>() to randomly insert 31 items into an array.
-    
-        ```csharp
-            private static ReadOnlySpan<Button> s_allButtons = new[]
-            {
-                Button.Red,
-                Button.Green,
-                Button.Blue,
-                Button.Yellow,
-            };
-
-            // ...
-
-            Button[] thisRound = Random.Shared.GetItems(s_allButtons, 31);
-        ```
-
-    - `Shuffle<T>` : 
-        This method help us to shuffle the items into list, basically These methods are useful for reducing training bias in machine learning (so the first thing isn't always training, and the last thing always test).
-
-        ```csharp
-            YourType[] trainingData = LoadTrainingData();
-            Random.Shared.Shuffle(trainingData);
-        ```
-
-    - Click here to see demo : [Improvement in Random](https://github.com/jil1710/dotnet8/tree/master/RandomImprovements)
-
-
-- ### **Replacing the call with Interceptor  in .net 8 :**
-
-    Interceptors are an interesting new experimental feature coming in C#12 and .Net 8 that allow you to replace (or "intercept") a method call in your application with an alternative method. When your app is compiled, the compiler automatically "swaps out" the call to the original method with your substitute.
-
-    ![image](https://github.com/jil1710/readmedemo/assets/125335932/ef644b79-8ec8-423d-92bb-50a653cd6bf4)
-
-    ![image](https://github.com/jil1710/readmedemo/assets/125335932/6f5a74c2-9dd3-42d4-8ff0-a80ae65c5371)
-
-    Output :
-
-    ![image](https://github.com/jil1710/readmedemo/assets/125335932/81f82dfd-2fee-4b0b-91aa-a08e9f31fbef)
-
-    Add this two properties in Project File :
-
-    ![image](https://github.com/jil1710/readmedemo/assets/125335932/fd93c4b4-9323-4ae5-ac28-2ee96ce59e91)
-
-
-    - Click here to see demo : [Replacing the call with Interceptor  in .net 8](https://github.com/jil1710/dotnet8/tree/master/ReplaceMethodCallWithInterseptor)
-
-
-- ### **Authentication change in .net 8 :**
-
-    From .net 8 Authentication made simple using `app.MapIndentity<T>()` we can move forward it will automatically create `/register`, `/login`, `/refresh-token` etc....
-
-    The following code snippet shows how MapIndentity<T> can be used.
-
-    ![image](https://github.com/jil1710/readmedemo/assets/125335932/c187bea9-44d8-4218-9bb8-a7cdc0910f1c)
-
-    ![image](https://github.com/jil1710/readmedemo/assets/125335932/622f37f4-a824-46dc-9a80-d46b9665906e)
-
-
-    - Click here to see demo : [Authentication change in .net 8](https://github.com/jil1710/dotnet8/tree/master/AuthChangeInDotNet8)
-
-
-- ### **Background Tasks improve :**
-
-   Hosted services now have more options for execution during the application lifecycle. Microsoft.Extensions.Hosting.IHostedService provided StartAsync and StopAsync, and now Microsoft.Extensions.Hosting.IHostedLifecycleService provides these additional methods:
-
-    - Microsoft.Extensions.Hosting.IHostedLifecycleService.StartingAsync(System.Threading.CancellationToken)
-    - Microsoft.Extensions.Hosting.IHostedLifecycleService.StartedAsync(System.Threading.CancellationToken)
-    - Microsoft.Extensions.Hosting.IHostedLifecycleService.StoppingAsync(System.Threading.CancellationToken)
-    - Microsoft.Extensions.Hosting.IHostedLifecycleService.StoppedAsync(System.Threading.CancellationToken)
-
-    These methods run before and after the existing points respectively.
-  
-    - IHostedService example
-
-      ![image](https://github.com/jil1710/readmedemo/assets/125335932/0682bb23-5473-4af0-ad0d-25e208f9f5e3)
-
-    - IHostedLifecycleService example which has application lifecycle
+- To inject one of the Event Hubs clients as a dependency in an ASP.NET Core application, install the Azure client library integration for ASP.NET Core package.
  
-      ![image](https://github.com/jil1710/readmedemo/assets/125335932/ff6bf254-feb3-4cc2-b8e8-30e2bf22080c)
-
-    - Click here to see demo : [Background Tasks improve](https://github.com/jil1710/dotnet8/tree/master/BackgroundTaskFixedInDotnet8)
-
-
-- ### **Builtin Guard Clause :**
-
-    As C# 12 is release with .Net 8 reference so in .Net 8 we have built in guard clause that help us in code minimization and perfomance improve:
-
-    ![image](https://github.com/jil1710/readmedemo/assets/125335932/85234179-cf11-494d-8992-f22f0bb22f8d)
-
-    - Click here to see demo : [Builtin Guard Types](https://github.com/jil1710/dotnet8/tree/master/BuiltInGuardClauses)
-
-
-- ### **TimeProvider Abstract class :**
-
-    In ASP.NET 8, new abstract class is introduce that will give system time with accurate precidence:
-
     ```csharp
-        // Get system time.
-        DateTimeOffset utcNow = TimeProvider.System.GetUtcNow();
-        DateTimeOffset localNow = TimeProvider.System.GetLocalNow();
+        dotnet add package Microsoft.Extensions.Azure
     ```
+ - After installing, register the desired Event Hubs client types in the Startup.ConfigureServices method:
+   
+    ```csharp
+        services.AddAzureClients(builder =>
+        {
+            builder.AddEventHubProducerClient(Configuration.GetConnectionString("EventHubs"));
+        });
+    ```
+- To use the preceding code, add this to the configuration for your application:
 
-    - Click here to see demo : [TimeProvider Abstract class](https://github.com/jil1710/dotnet8/tree/master/TimeProviderClass)
- 
-- ### **Form Binding in minimal Api :**
+  ```json
+    {
+      "ConnectionStrings": {
+        "EventHub": "[Your-Connection-String]"
+      }
+    }
+  ```
 
-    In ASP.NET 8, Form binding with complem type optimize and add stop automatic validation of anti forgery token by using middleware `DisableAntiforgery()`:
-
-    ![image](https://github.com/jil1710/readmedemo/assets/125335932/582b4bff-4629-4a4b-a6bd-7694f82ee04a)
 
 
-    - Click here to see demo : [Form Binding in minimal Api](https://github.com/jil1710/dotnet8/tree/master/FormBindingInMinimalApi)
+
 
 
 
