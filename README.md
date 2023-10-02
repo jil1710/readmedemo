@@ -1,4 +1,5 @@
-![Logo](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbEexd6uALtO6V3yZmdcAMP_QTTQQXleXcwg&usqp=CAU)
+
+![cbimage](https://github.com/jil1710/readmedemo/assets/125335932/f63c6e59-83c2-4f93-be8e-fec3748982d2)
 
 # Azure Function
 
@@ -21,6 +22,18 @@
     - **EventHubTrigger :-** Respond to events delivered to an Azure Event Hub. Particularly useful in application instrumentation, user experience or workflow processing, and internet-of-things (IoT) scenarios.
     - **ServiceBusQueueTrigger :-** Connect your code to other Azure services or on-premises services by listening to message queues.
     - **ServiceBusTopicTrigger :-** Connect your code to other Azure services or on-premises services by subscribing to topics.
+
+## How Do I Make an Azure Function App?
+
+- Azure Functions can be built in two ways either through Azure portal or using Visual Studio. Below are the step by step process to create and deploy Azure Functions.
+
+- **Create Azure Functions in Azure Portal:**
+    - Click on Create a resource, select on Azure Functions App in Compute section and Click Create.
+    - Provide the necessary details and create it.
+
+- **Create Azure Functions in Visual Studio:**
+  - Select **File -> New Project**. Select Azure Function project.
+  - Provide the necessary details like Name, path, Function App version and Trigger option. Click Create.
 
 ## Where Are Azure Functions Used?
 
@@ -53,9 +66,22 @@
          
         ![image](https://github.com/jil1710/readmedemo/assets/125335932/6e2a69e5-73fd-46d8-88f6-6ae5a1377a01)
 
-     - **Build a scalable web API :** An HTTP triggered function defines an HTTP endpoint. These endpoints run function code that can connect to other services directly or by using binding extensions. You can compose the endpoints into a web-based API.
+     - **Build a scalable web API :** An HTTP triggered function defines an HTTP endpoint. These endpoints run function code that can connect to other services directly or by using binding extensions. You can compose the endpoints into a web-based API. Http Trigger that is executed whenever an HTTP request is made.
  
          ![image](https://github.com/jil1710/readmedemo/assets/125335932/8b2d7212-cd90-447c-8726-ee76e7381ee2)
+
+       - For Example
+      
+         ![image](https://github.com/jil1710/readmedemo/assets/125335932/0cabff9c-8369-4bc9-9823-61ed2126e899)
+
+          ![image](https://github.com/jil1710/readmedemo/assets/125335932/ad0b2d93-3416-489a-b9c2-49c9f0a03ff3)
+
+## To Publish the Azure Functions from Visual studio: 
+
+- Right Click on the Project Name, Select Publish.
+- Provide the details like Resource group name, storage account and more. After this process, the profile will be created and ready to publish.
+- Click Publish.
+
 
 
 
