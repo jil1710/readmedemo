@@ -1,97 +1,61 @@
+![Logo](https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbEexd6uALtO6V3yZmdcAMP_QTTQQXleXcwg&usqp=CAU)
 
-<img src="https://github.com/jil1710/readmedemo/assets/125335932/76e579f2-1a7a-481e-9e0a-9530ba68543d" width="150" height="150"/>
+# Azure Function
 
+- Azure Functions is a serverless solution that allows you to write less code, maintain less infrastructure, and save on costs. Instead of worrying about deploying and maintaining servers, the cloud infrastructure provides all the up-to-date resources needed to keep your applications running.
 
-# Azure Event Hub
+-  In simple words, Azure Function is a serverless compute service that enables user to run event-triggered code without having to provision or manage infrastructure. Being as a trigger-based service, it runs a script or piece of code in response to a variety of events.
 
-- Event Hub is an Azure service that enables in processing large amounts of event data from connected devices and applications. Event Hub is a subscription based publish-subscribe data processor and analyzer services, which enables in collecting data from events and transforming that data into analytical data. It is used in applications specifically those built for internet of things (IoT) or big data systems.
-
-- Azure Event Hubs are designed for big data ingestion from a different variety of sources such as social data, web apps, sensor data, weather data, IoT devices, etc.
-
--  We can choose to capture all incoming data in Azure Storage, or we can also decide to trigger Azure Functions in response to new events.
-
-
-# Event Hubs Architecture
-
-  ![image](https://github.com/jil1710/readmedemo/assets/125335932/b7356d1b-bd4c-4d5c-9b29-8a44fc50241f)
-
-- **Event producers :** Any object that sends an event to an event hub.
-- **Partitions :** we can only read a particular subset, or segment, of the message stream.
-- **Consumer groups :** The data can be used by different consumers according to their own requirements. Some consumers want to use it carefully only once, some consumers used historical data again and again.
-- **Throughput units :** Throughput units are the foundation of how you can scale the traffic coming in and going out of Azure Event Hubs.
-- **Event receivers :** Any object (applications) that read event data from an Azure Event Hub is a receiver.
-
-
-# Use Case of Event Hub
-
-- Where we need to integrate/coordinate/receive millions of things (IoT Internet of Things), for example receive messages from millions of sensors, coordinate messages among thousands of trains or taxis and what not, send millions of logging messages to the cloud (on-premise tracking, monitoring or advertising centralization and more).
-- Where we need to collect audit data from devices in the field.
-- To collect the GPS locations of devices.
-
-
-## Let's implement Azure Event Hub using ASP.Net core
-
-- **Step 1 :** 
+## How Do You Call Azure Function?
     
-    Create Event hub namespace after that create event hub under selected namespace then redirect to access key section and copy the connection string to communicate with hub from user end application.
+- Azure Functions can be called when triggered by the events from other services. Being event driven, the application platform has capabilities to implement code triggered by events occurring in any third-party service or on-premise system.
 
-- **Step 2 :**
+- Azure Functions provides templates to get you started with key scenarios, including the following:
 
-    Download the below nuget package in order to start with azure event hub.
+    - **HTTPTrigger :-** Trigger the execution of your code by using an HTTP request.
+    - **TimerTrigger :-** Execute clean up or other batch tasks on a predefined schedule.
+    - **CosmosDBTrigger :-** Process Azure Cosmos DB documents when they are added or updated in collections in a NoSQL database.
+    - **BlobTrigger :-** Process Azure Storage blobs when they are added to containers. You might use this function for image resizing.
+    - **QueueTrigger :-** Respond to messages as they arrive in an Azure Storage queue.
+    - **EventGridTrigger :-** Respond to events delivered to a subscription in Azure Event Grid. Supports a subscription-based model for receiving events, which includes filtering. A good solution for building event-based architectures.
+    - **EventHubTrigger :-** Respond to events delivered to an Azure Event Hub. Particularly useful in application instrumentation, user experience or workflow processing, and internet-of-things (IoT) scenarios.
+    - **ServiceBusQueueTrigger :-** Connect your code to other Azure services or on-premises services by listening to message queues.
+    - **ServiceBusTopicTrigger :-** Connect your code to other Azure services or on-premises services by subscribing to topics.
 
-    ```csharp
-        Azure.Messaging.EventHubs
-    ```
+## Where Are Azure Functions Used?
 
-- Here we are creating producer who is responsible for producing event to event hub and on the other hand consumer consume the event and process it.
+- Azure Functions are best suited for smaller apps have events that can work independently of other websites. Some of the common azure functions are sending emails, starting backup, order processing, task scheduling such as database cleanup, sending notifications, messages, and IoT data processing.
 
-- **Let's Create Producer that send the event to event hub :**
+    - **Process file uploads :** In a retail solution, a partner system can submit product catalog information as files into blob storage. You can use a blob triggered function to validate, transform, and process the files into the main system as they're uploaded.
 
-    `EventHubProducerClient` help us to connect .net application with azure event hub in order to post the event. After that we can create batch event and post the event.
-
-    ![image](https://github.com/jil1710/readmedemo/assets/125335932/0d44bd12-da0b-4c11-bbb2-a9f36334b3f0)
+        ![image](https://github.com/jil1710/readmedemo/assets/125335932/668c7e7e-241a-4329-8917-780325de84f2)
 
 
-- **Let's Create Consumer that consume the events from event hub :**
-
-  `EventHubConsumerClient` help us to consume the event using .net application from azure event hub. After that we process the event according to our needs.
-
-  ![image](https://github.com/jil1710/readmedemo/assets/125335932/3c3ff554-e77d-4b52-8542-055d0f3af703)
-
-- This is the simple demo console application how to use Event hub using C# and produce and consume the event. In order to use the above example using ASP.Net Core DI Injection we can register using below snippet :
-
-- To inject one of the Event Hubs clients as a dependency in an ASP.NET Core application, install the Azure client library integration for ASP.NET Core package.
+    - **Run scheduled tasks :** Functions enables you to run your code based on a cron schedule that you define. For example, might be analyzed for duplicate entries every 15 minutes to avoid multiple communications going out to the same customer.
  
-    ```csharp
-        dotnet add package Microsoft.Extensions.Azure
-    ```
- - After installing, register the desired Event Hubs client types in the Startup.ConfigureServices method:
-   
-    ```csharp
-        services.AddAzureClients(builder =>
-        {
-            builder.AddEventHubProducerClient(Configuration.GetConnectionString("EventHubs"));
-        });
-    ```
-- To use the preceding code, add this to the configuration for your application:
+        ![image](https://github.com/jil1710/readmedemo/assets/125335932/3e1ce470-5573-4877-9c9f-fc47cecc6a68)
 
-  ```json
-    {
-      "ConnectionStrings": {
-        "EventHub": "[Your-Connection-String]"
-      }
-    }
-  ```
+      ```csharp
+          [FunctionName("TimerTriggerCSharp")]
+          public static void Run([TimerTrigger("0 */15 * * * *")]TimerInfo myTimer, ILogger log)
+          {
+              if (myTimer.IsPastDue)
+              {
+                  log.LogInformation("Timer is running late!");
+              }
+              log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
+          
+              // Perform the database deduplication
+          }
+      ```
 
+    - **Respond to database changes :** There are processes where you might need to log, audit, or perform some other operation when stored data changes. Functions triggers provide a good way to get notified of data changes to initial such an operation.
+         
+        ![image](https://github.com/jil1710/readmedemo/assets/125335932/6e2a69e5-73fd-46d8-88f6-6ae5a1377a01)
 
-
-
-
-
-
-    
-
-
+     - **Build a scalable web API :** An HTTP triggered function defines an HTTP endpoint. These endpoints run function code that can connect to other services directly or by using binding extensions. You can compose the endpoints into a web-based API.
+ 
+         ![image](https://github.com/jil1710/readmedemo/assets/125335932/8b2d7212-cd90-447c-8726-ee76e7381ee2)
 
 
 
