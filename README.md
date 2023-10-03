@@ -34,82 +34,57 @@
 
         ![key0 4](https://github.com/jil1710/readmedemo/assets/125335932/1efad340-a976-45f4-9748-46f4a45301fe)
 
-- **Step 5 -** After go to our key vault section and in that gave access to our app that we register in above step-4
+- **Step 5 -** After go to our key vault section and in that gave access to our app that we register in above step-4. Go to -> your.key.vault -> Access Policies -> Create. You can gave get,set,delete etc.. access to your secrets via our registered app.
+
+  ![image](https://github.com/jil1710/readmedemo/assets/125335932/f07aaf4d-d142-4db7-91ed-209a5005e814)
+
+    - Select Key Management and gave the operation you perform on secrets such as read, get, set, list, recover, delete etc...
+
+      ![image](https://github.com/jil1710/readmedemo/assets/125335932/b3bcc444-d0f6-4b70-a798-3ec13acb185c)
+
+- **Step 6 -** Create .Net Core app or install below mention nuget package in order to communicate with key vault:
+
+  ```csharp
+      Azure.Extensions.AspNetCore.Configuration
+  ```
+
+  ```csharp
+    Azure.Security.KeyVault.Secrets
+  ```
+
+  ```csharp
+    Azure.Identity
+  ```
+
+- **Step 7 -** Configure or Add Azure Key Vault Service into Program.cs file and also add the  `client id`, `tenent id`, `client secret key`, `key vault url` into appsettings.json
+
+  ```json
+    "KeyVaultSecretConfiguration": {
+      "KeyVaultURL": "key-vault-url",
+      "ClientId": "client id",
+      "ClientSecret": "client secret key",
+      "TenantId": "tenant id"
+    }
+  ```
+ 
+  ![image](https://github.com/jil1710/readmedemo/assets/125335932/817b2573-6951-40ee-9130-1a6309ba04a4)
+
+  - Here our key name is `AzureBlob-ConnectionStrings--AzureBlobStorage` to access the secret key value then using IConfiguration interface we can access for eg : configuration["AzureBlob-ConnectionStrings--AzureBlobStorage"] but it's very long key and not a proper way to use so we simplified the key by implementing `KeyVaultSecretManager` let see the example :
+ 
+    ![image](https://github.com/jil1710/readmedemo/assets/125335932/5e447f51-8bb4-4284-b695-b3cd189f14e7)
+
+ - After that we can access the secret key value by proper method so below :
+
+    ![image](https://github.com/jil1710/readmedemo/assets/125335932/40902cec-f047-4216-b0bd-91729c48a333)
+
+
+
+
+
+
+    
 
   
-- Azure Functions provides templates to get you started with key scenarios, including the following:
-
-    - **HTTPTrigger :-** Trigger the execution of your code by using an HTTP request.
-    - **TimerTrigger :-** Execute clean up or other batch tasks on a predefined schedule.
-    - **CosmosDBTrigger :-** Process Azure Cosmos DB documents when they are added or updated in collections in a NoSQL database.
-    - **BlobTrigger :-** Process Azure Storage blobs when they are added to containers. You might use this function for image resizing.
-    - **QueueTrigger :-** Respond to messages as they arrive in an Azure Storage queue.
-    - **EventGridTrigger :-** Respond to events delivered to a subscription in Azure Event Grid. Supports a subscription-based model for receiving events, which includes filtering. A good solution for building event-based architectures.
-    - **EventHubTrigger :-** Respond to events delivered to an Azure Event Hub. Particularly useful in application instrumentation, user experience or workflow processing, and internet-of-things (IoT) scenarios.
-    - **ServiceBusQueueTrigger :-** Connect your code to other Azure services or on-premises services by listening to message queues.
-    - **ServiceBusTopicTrigger :-** Connect your code to other Azure services or on-premises services by subscribing to topics.
-
-## How Do I Make an Azure Function App?
-
-- Azure Functions can be built in two ways either through Azure portal or using Visual Studio. Below are the step by step process to create and deploy Azure Functions.
-
-- **Create Azure Functions in Azure Portal:**
-    - Click on Create a resource, select on Azure Functions App in Compute section and Click Create.
-    - Provide the necessary details and create it.
-
-- **Create Azure Functions in Visual Studio:**
-  - Select **File -> New Project**. Select Azure Function project.
-  - Provide the necessary details like Name, path, Function App version and Trigger option. Click Create.
-
-## Where Are Azure Functions Used?
-
-- Azure Functions are best suited for smaller apps have events that can work independently of other websites. Some of the common azure functions are sending emails, starting backup, order processing, task scheduling such as database cleanup, sending notifications, messages, and IoT data processing.
-
-    - **Process file uploads :** In a retail solution, a partner system can submit product catalog information as files into blob storage. You can use a blob triggered function to validate, transform, and process the files into the main system as they're uploaded.
-
-        ![image](https://github.com/jil1710/readmedemo/assets/125335932/668c7e7e-241a-4329-8917-780325de84f2)
-
-
-    - **Run scheduled tasks :** Functions enables you to run your code based on a cron schedule that you define. For example, might be analyzed for duplicate entries every 15 minutes to avoid multiple communications going out to the same customer.
- 
-        ![image](https://github.com/jil1710/readmedemo/assets/125335932/3e1ce470-5573-4877-9c9f-fc47cecc6a68)
-
-      ```csharp
-          [FunctionName("TimerTriggerCSharp")]
-          public static void Run([TimerTrigger("0 */15 * * * *")]TimerInfo myTimer, ILogger log)
-          {
-              if (myTimer.IsPastDue)
-              {
-                  log.LogInformation("Timer is running late!");
-              }
-              log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
-          
-              // Perform the database deduplication
-          }
-      ```
-
-    - **Respond to database changes :** There are processes where you might need to log, audit, or perform some other operation when stored data changes. Functions triggers provide a good way to get notified of data changes to initial such an operation.
-         
-        ![image](https://github.com/jil1710/readmedemo/assets/125335932/6e2a69e5-73fd-46d8-88f6-6ae5a1377a01)
-
-     - **Build a scalable web API :** An HTTP triggered function defines an HTTP endpoint. These endpoints run function code that can connect to other services directly or by using binding extensions. You can compose the endpoints into a web-based API. Http Trigger that is executed whenever an HTTP request is made.
- 
-         ![image](https://github.com/jil1710/readmedemo/assets/125335932/8b2d7212-cd90-447c-8726-ee76e7381ee2)
-
-       - For Example
-      
-         ![image](https://github.com/jil1710/readmedemo/assets/125335932/0cabff9c-8369-4bc9-9823-61ed2126e899)
-
-          ![image](https://github.com/jil1710/readmedemo/assets/125335932/ad0b2d93-3416-489a-b9c2-49c9f0a03ff3)
-
-## To Publish the Azure Functions from Visual studio: 
-
-- Right Click on the Project Name, Select Publish.
-- Provide the details like Resource group name, storage account and more. After this process, the profile will be created and ready to publish.
-- Click Publish.
-
-
-
 
 
 
