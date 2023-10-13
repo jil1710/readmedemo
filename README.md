@@ -1,6 +1,4 @@
-
-
-![cbimage (2)](https://github.com/jil1710/readmedemo/assets/125335932/dcea5a56-7d8f-429e-b3f7-778f4b5f3118)
+<img src="https://github.com/jil1710/readmedemo/assets/125335932/123ae210-4eb3-466b-8395-348f41546036" width="250px" height="150px"/>
 
 # Authentication And Authorization
 
@@ -55,6 +53,13 @@
   - Then Create secret route that is only access by `Administrition` role and authenticated user.
 
     ![image](https://github.com/jil1710/readmedemo/assets/125335932/823ea762-c6f5-4a8d-8aba-0a3d1938bd5b)
+
+# JWT and Multiple Scheme Authentication
+
+- JSON Web Token is an open standard (RFC 7519) that defines a safe, compact, and self-contained, secured way for transmission of information between a sender and a receiver through a URL, a POST parameter, or inside the HTTP Header. It should be noted that the information to be transmitted securely between two parties is represented in JSON format and it is cryptographically signed to verify its authenticity. JWT is typically used for implementing authentication and authorization in Web applications. Because JWT is a standard, all JWTs are tokens but the reverse is not true. You can work with JSON Web Tokens in .NET, Python, Node.js, Java, PHP, Ruby, Go, JavaScript, etc.
+
+  ![image](https://github.com/jil1710/readmedemo/assets/125335932/830f1ed7-c025-48b6-b5fe-760709c2dc50)
+
 
 
 
