@@ -179,6 +179,93 @@
 
 - Click here to see the example : [Custom Authorize Attribute](https://github.com/jil1710/Authentication-Authorization/tree/master/CustomAuthorizeAttribute)
 
+# Using Identity Server
+
+- Identity Server4 is an open-source authentication provider with OpenID connect and OAuth2.0 framework for ASP.NET Core. It acts as a centralized authentication provider or security token server (STS). It will be ideal to go through layers when you have multiple API/microservices applications and you should have single security token server to handle the authentication so that you really don’t have to define the Authentication in each and every application.   
+
+- Identity server4 is a simple and straightforward STS. The user uses the clients (ASP.NET MVC or angular or react application and so on) to access the data, these users are authenticated by Identity Server to use the client. After successful authentication, the Identity server will send a token to client. Then client should use this token to access the data from the APIs. 
+
+- The identityServer4 is the implementation of OpenID Connect and OAuth 2.0 to secure mobile, native and web applications. It acts as a middleware and a single source where you can integrate with multiple application to frame the authentication layer to secure your applications.
+
+- **Let's Implement IdentityServer4**
+
+  - Create ASP.NET Core Project with IdentityServer 4 and Install below nuget package.
+    ```csharp
+        Install-Package IdentityServer4
+    ```
+
+  - **Adding in-memory configuration**
+ 
+    **1. Identity Resource :** The data like UserId, phone number, email which has something unique to a particular identity/user are the Identity Resource. Add the following code to IdentityConfigration class.
+
+    ![image](https://github.com/jil1710/readmedemo/assets/125335932/8e9c0eb6-2f0e-4f46-aa15-437da215f295)
+
+    **2. Add API Resource :** Let’s define the API Resource with Scopes and API Secrets. Ensure to hash this secret code. This secret hashed code will be saved internal within IdentityServer4..
+
+    ![image](https://github.com/jil1710/readmedemo/assets/125335932/f64b53b8-75e6-475a-a55d-05302c5e0b1e)
+
+    **3. Add Clients :** Let’s define the clients by giving proper clientId and name. We also have to define who will be granted access to our protected resource. In our case it is GetProduct. Add following code to IdentityConfigration class.
+
+    ![image](https://github.com/jil1710/readmedemo/assets/125335932/5eb0dbf4-dcb0-4327-a07d-9456bae2153d)
+
+    **4. Registering IdentityServer4 in ASP.NET Core :**
+
+    ![image](https://github.com/jil1710/readmedemo/assets/125335932/c6236ad2-b86f-48c3-bb18-2b3312929bc4)
+
+    **5. Add Identity Server Middle**
+
+    ![image](https://github.com/jil1710/readmedemo/assets/125335932/514af3dc-189f-4695-a390-ed5b4c5bde0e)
+
+
+- **Now Setup the Client Side and redirect to authentication page of IdentityServer4.**
+
+  - **Install below nuget package**
+    ```csharp
+        Microsoft.AspNetCore.Authentication.OpenIdConnect
+    ```
+
+  - After that register OpenIdConnect in program.cs file
+
+    ![image](https://github.com/jil1710/readmedemo/assets/125335932/bcd29e8f-a2bc-437d-96d7-481d48a8ef71)
+
+    - Aurthority : our identity server url.
+    - client id : add client which we created in identityserver configuration.
+    - secret key : add secret key which we created in identityserver configuration.
+    - save token : to save the access token in client side cookie.
+   
+  - After that create aurthorize route and try to hit that route it will redirect to identity server login after authenticated and in back channel it will generating the token and redirect to that secret authorize page.
+
+    ![image](https://github.com/jil1710/readmedemo/assets/125335932/872ae9cc-ffa6-42c1-853e-a3fc7e69eefd)
+
+  - Output :
+
+    - See the below image and also the url when we hit secret tab then it will redirect to identity server if we are already authenticated then it show the authorize page.
+      
+        ![image](https://github.com/jil1710/readmedemo/assets/125335932/08a193cb-39d9-4c10-85d8-a2a84058fdce)
+ 
+    - After entering the valid credential and hit the login button then it will authenticate successfull and then redirect back to secret authoriza page.
+
+        ![image](https://github.com/jil1710/readmedemo/assets/125335932/c99aab6a-bb37-4bda-9cc2-df33b8f7e05d)
+
+        ![image](https://github.com/jil1710/readmedemo/assets/125335932/7d9a1c7e-9a6f-4e8f-a863-6502b366ddad)
+
+- Click here to see the example : [Client Side Code](https://github.com/jil1710/Authentication-Authorization/tree/master/Client_MVC)
+
+- Click here to see the example : [Identity Server Code](https://github.com/jil1710/Authentication-Authorization/tree/master/OpenIdServer)
+ 
+
+
+
+
+
+
+
+
+
+
+
+    
+
 
 
 
