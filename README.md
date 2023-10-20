@@ -1,286 +1,115 @@
-<img src="https://github.com/jil1710/readmedemo/assets/125335932/123ae210-4eb3-466b-8395-348f41546036" width="250px" height="150px"/>
 
-# Authentication And Authorization
+![image](https://github.com/jil1710/readmedemo/assets/125335932/26a866fd-9694-465e-a445-ff87052e235e)
 
-- Authentication is the process of determining a user's identity.
-- Authorization is the process of determining whether a user has access to a resource.
-- In ASP.NET Core, authentication is handled by the authentication service, IAuthenticationService, which is used by authentication middleware. The authentication service uses registered authentication handlers to complete authentication-related actions. Examples of authentication-related actions include:
-    - Authenticating a user.
-    - Responding when an unauthenticated user tries to access a restricted resource.
+
+# Elastic Search
+
+- Elasticsearch is a free, open-source search and analytics engine based on the Apache Lucene library. It’s the most popular search engine and has been available since 2010.Elasticsearch is a highly scalable open-source full-text search and analytics engine. It allows you to store, search, and analyze big volumes of data quickly and in near real time. It is generally used as the underlying engine/technology that powers applications that have complex search features and requirements. Elasticsearch provides a distributed system on top of Lucene StandardAnalyzer for indexing and automatic type guessing and utilizes a JSON based REST API to refer to Lucene features.
+
+- It is easy to set up out of the box since it ships with sensible defaults and hides complexity from beginners. It has a short learning curve to grasp the basics so anyone with a bit of efforts can become productive very quickly. It is schema-less, using some defaults to index the data.
+
+- It is built in Java. Easy to use and highly scalable. Often used to provide search functionality to an application with features like auto complete, correcting typos, handling synonyms, logging etc...
  
-## Cookie Authentication
+## Let's Understand Component and Terminology of Elastic search
 
-- Cookie authentication in ASP.NET Core web application is the popular choice for developers to implement authentication in most customer-facing web applications and is also easy to implement in ASP.NET Core as it is provided out of the box without the need to reference any additional NuGet packages.
-- ASP.NET Core provides a cookie authentication mechanism which on login serializes the user details in form of claims into an encrypted cookie and then sends this cookie back to the server on subsequent requests which gets validated to recreate the user object from claims and sets this user object in the HttpContext so that it is available & is valid only for that request.
+- **Elasticsearch Components**
 
-- **How does cookie authentication in ASP.NET Core work?**
+  - Cluster
 
-  ![image](https://github.com/jil1710/readmedemo/assets/125335932/b219f13f-472b-4998-9b34-f726faeede42)
+    One or more servers collectively providing indexing and search capabilities form an Elasticsearch cluster. The cluster size can vary from a single node to thousands of nodes, depending on the use cases.
 
-  - User requests URL from the server
-  - Based on the access set server will either return the page if it’s a public page or will return the login page if its a secured page i.e. asking the user to login to access the secured page
-  - User will perform login action & credentials will be sent to the server for validation
-  - If provided credentials are valid then the server will set an authentication cookie in response.
-  - Now all further requests from the user will carry this cookie in the header so that on each request server knows that the user is already authenticated & also user details can be read from cookie to identity request if from which user.
+  - Node
 
-- **Let's Implement Cookie Authentication:**
+    Node is a single physical or virtual machine that holds full or part of your data and provides computing power for indexing and searching your data. Every node is identified with a unique name. If the node identifier is not specified, a random UUID is assigned as a node identifier at the startup. Every node configuration has the property `cluster.name`. The cluster will be formed automatically with all the nodes having the same `cluster.name` at startup.
 
-  - First Create ASP.Net Core Project And Add LoginModel and User model for role base authorization:
+    - A node has to accomplish several duties like:
 
-    ![image](https://github.com/jil1710/readmedemo/assets/125335932/ea52c3c1-02a8-40d9-b6ed-ae6c0073dadd)
+        - Storing the data.
+        - Performing operations on data (indexing, searching, aggregation, etc.).
+        - Maintaining the health of the cluster.
+     
+- Elasticsearch is standing as a NOSQL DB that store data as document type.
 
-    ![image](https://github.com/jil1710/readmedemo/assets/125335932/c52c93b8-70e0-414d-8811-1c60cddd7956)
+  ![image](https://github.com/jil1710/readmedemo/assets/125335932/482f5abb-1d03-418c-a6f0-468734280553)
 
-  - Now seed some user into List<User> or you can use database or identity framework to validate or storing of user. Here for i am using list of User static data as storage.
+- Index
 
-    ![image](https://github.com/jil1710/readmedemo/assets/125335932/a4a85237-21ab-40f6-920d-6f1f2579237d)
+    Index is a container to store data similar to a database in the relational databases. An index contains a collection of documents that have similar characteristics or are logically related. If we take an example of an e-commerce website, there will be one index for products, one for customers, and so on. Indices are identified by the lowercase name. The index name is required to perform the add, update, or delete operations on the document.
 
-  - After that Cookie Authentication scheme and Authorization policy into program.cs file
+- Type
 
-    ![image](https://github.com/jil1710/readmedemo/assets/125335932/98fef953-8926-49d2-8a9a-c50a968dc116)
+  Type is a logical grouping of the documents within the index. In the previous example of product index, we can further group documents into types, like electronics, fashion, furniture, etc. Types are defined on the basis of documents having similar properties in it. It isn’t easy to decide when to use type over index. Indices have more overheads, so sometimes, it is better to use different types in the same index for better performance. There are a couple of restrictions to use types as well. Two fields having the same name in a different type of document should be of the same data type (string, date, etc).
 
-  - Add This two middleware in same order as below :
+- Document
 
-    ![image](https://github.com/jil1710/readmedemo/assets/125335932/991e8ad1-1881-4a46-81b4-a52af98c016a)
+    Document is the piece indexed by Elasticsearch. A document is represented in the JSON format. We can add as many documents as we want into an index. The following snippet shows how to create a document of type mobile in the index store.
 
-  - Add login api that validate the user and authenticate the user then create the session by storing the cookie.
+## Data Type in Elastic Search
 
-    ![image](https://github.com/jil1710/readmedemo/assets/125335932/0dc20e57-bed6-46e2-bcae-15c627b4de7a)
+- Text
 
-    ![image](https://github.com/jil1710/readmedemo/assets/125335932/7bb81bd9-39df-4454-baf1-432102f682a5)
+    This data type is used to store full text like product description. These fields participate in full-text search. These type of fields are analyzed while storing which enables to searching these fields by the individual word in it. These type of fields are not used in sorting and aggregation queries.
+
+  ![image](https://github.com/jil1710/readmedemo/assets/125335932/07249449-603f-481d-a521-67b8b2e33daf)
 
 
-  - Then Create secret route that is only access by `Administrition` role and authenticated user.
+- Keywords
 
-    ![image](https://github.com/jil1710/readmedemo/assets/125335932/823ea762-c6f5-4a8d-8aba-0a3d1938bd5b)
+    This type is also used to store text data but unlike Text, it is not analyzed and stored as-is. This is suitable to store information like a user’s mobile number, city, age, etc. These fields are used in filter, aggregation and sorting queries. For e.g. list all users from a particular city, filter by their age.
 
-  Click here to see the example : [Cookie Authentication](https://github.com/jil1710/Authentication-Authorization/tree/master/CookieAuthentication)
+    ![image](https://github.com/jil1710/readmedemo/assets/125335932/056fa496-1734-45e2-89eb-f9acc9df42c4)
 
-# JWT and Multiple Scheme Authentication
 
-- JSON Web Token is an open standard (RFC 7519) that defines a safe, compact, and self-contained, secured way for transmission of information between a sender and a receiver through a URL, a POST parameter, or inside the HTTP Header. It should be noted that the information to be transmitted securely between two parties is represented in JSON format and it is cryptographically signed to verify its authenticity. JWT is typically used for implementing authentication and authorization in Web applications. Because JWT is a standard, all JWTs are tokens but the reverse is not true. You can work with JSON Web Tokens in .NET, Python, Node.js, Java, PHP, Ruby, Go, JavaScript, etc.
+- Numeric
 
-  ![image](https://github.com/jil1710/readmedemo/assets/125335932/830f1ed7-c025-48b6-b5fe-760709c2dc50)
+  Elasticsearch supports a wide range of numeric type long, integer, short, byte, double, float.
 
-- JWT is represented as a combination of three base64url encoded parts concatenated with period ('.') characters and comprises the following three sections:
+  ![image](https://github.com/jil1710/readmedemo/assets/125335932/6499525d-39ea-48d6-aa32-c52aa91f3745)
 
-  - **Header**
-  - **Payload**
-  - **Signature**
 
-- **Header Section**
+- Boolean & Data
 
-    - This section provides metadata about the type of data and the algorithm to be used to encrypt the data that is to be transferred. The JWT header comprises three sections - these include: the metadata for the token, the type of signature, and the encryption algorithm. It comprises two properties, i.e., “alg” and “typ”. Although the former relates to the cryptography algorithm used, i.e., HS256 in this case, the latter is used to specify the type of the token, i.e., JWT in this case.
-      ```json
-      {
-          "typ": "JWT",
-          "alg": "HS256"
-      }
-      ```
-- **Payload**
+  Elastic Search also support boolean and date type data to store boolean and date object.
+
+  ![image](https://github.com/jil1710/readmedemo/assets/125335932/8ebdd520-719b-40c7-b8cc-44529d67ff92)
   
-    - The payload represents the actual information in JSON format that is to be transmitted over the wire. The code snippet given below illustrates a simple payload.
-      ```json
-        {
-          "sub": "1234567890",
-          "name": "Joydip Kanjilal",
-          "admin": true,
-          "claims : { ... }
-          "jti": "cdafc246-109d-4ac9-9aa1-eb689fad9357",
-          "iat": 1611497332,
-          "exp": 1611500932
-        }
-      ```
-    - iss: This represents the issuer of the token.
-    - sub: This is the subject of the token.
-    - aud: This represents the audience of the token.
-    - exp: This is used to define token expiration.
-    - nbf: This is used to specify the time before which the token must not be processed.
-    - iat: This represents the time when the token was issued.
-    - jti: This represents a unique identifier for the token.
 
-- **Signature**
+- Object
 
-    - The signature adheres to the JSON Web Signature (JWS) specification and is used to verify the integrity of the data transferred over the wire. It comprises a hash of the header, the payload, and the secret, and is used to ensure that the message was not changed while being transmitted. The final signed token is created by adhering to the JSON Web Signature (JWS) specification. The encoded JWT header and as well as the encoded JWT payload is combined and then it's signed using a strong encryption algorithm such as HMAC SHA 256.
- 
-- **Let's Implement JWT Authentication and How to use multiple scheme in project**
+  If you know JSON well, this is not a new concept. Elasticsearch also allows storing nested JSON object structure as a document.
 
-  - First of all create ASP.Net Core Application and install below mention nueget packages :
-
-    ```csharp
-        Microsoft.AspNetCore.Authentication
-    ```
-    ```csharp
-        Microsoft.AspNetCore.Authentication.JwtBearer
-    ```
-
-  - After that add LoginModel and User model for role base authorization:
-
-    ![image](https://github.com/jil1710/readmedemo/assets/125335932/2ae59ebf-4bc2-4afc-bf09-6be3d43bdee5)
-    ![image](https://github.com/jil1710/readmedemo/assets/125335932/d930936a-2416-432e-a128-ebb798d1a8f1)
-
-  - Now seed some user into List<User> or you can use database or identity framework to validate or storing of user. Here for i am using list of User static data as storage.
-
-    ![image](https://github.com/jil1710/readmedemo/assets/125335932/a4a85237-21ab-40f6-920d-6f1f2579237d)
-
-  - Configuring JWT in the AppSettings File ( appsettings.json ) by creating the section of JWT as shown in below:
-
-    ```json
-        "JWT":
-        {
-            "Key": "qwertyuiopLKJHGFDSAzxcvbnm",
-            "Issuer": "https://localhost:7202",
-            "Audience": "https://localhost:7202"
-        }
-    ```
-    
-  - Configure Authentication with Bearer and JWT in addition also configure cookie authentication because in parallel we understant how to use multiple authentication scheme.
-
-    ![image](https://github.com/jil1710/readmedemo/assets/125335932/93674099-c059-4dde-a4a1-41623235d923)
-
-  - Add policy for both the scheme
-
-    ![image](https://github.com/jil1710/readmedemo/assets/125335932/4112df1b-d38b-43ce-92c7-73bd5d42f7ce)
-
-  - Add This two middleware in same order as below :
-
-    ![image](https://github.com/jil1710/readmedemo/assets/125335932/991e8ad1-1881-4a46-81b4-a52af98c016a)
-
-  - Add login route that use jwt scheme and return access token
-
-    ![image](https://github.com/jil1710/readmedemo/assets/125335932/ef65ef04-55ed-41af-a192-954de25128ba)
-
-  - Also create secret route that is only access by jwt access token schem by add jwt policy which we created above.
-
-    ![image](https://github.com/jil1710/readmedemo/assets/125335932/62262c89-4678-4e96-b81d-06e3a56dc240)
-
-  - Similarlly, add login route that use cookie authentication scheme and authenticate user.
-
-    ![image](https://github.com/jil1710/readmedemo/assets/125335932/664b87f5-f566-4b15-86c2-4134e2785f52)
-
-  - Also create secret route that is only access by cookie schem by add cookie policy which we created above.
-
-    ![image](https://github.com/jil1710/readmedemo/assets/125335932/d6bb7cba-7866-4998-ba4e-7f5c4410b036)
-
-  - Click here to see the example : [Jwt and Multiple Atuhentication scheme](https://github.com/jil1710/Authentication-Authorization/tree/master/MultipleAuthScheme)
+  ![image](https://github.com/jil1710/readmedemo/assets/125335932/db792faa-6e87-43e0-8714-fefdfe6b77a2)
 
 
-# Customs Authorize attribute
+- Nested
 
-- we can also create our own custom authoriza attribue.
+    The Object data type is not that useful due to its underlying data representation in the Lucene index. Lucene index does not support inner JSON object. ES flattens the original JSON to make it compatible to store in Lucene index. Due to this fields of the multiple inner objects get merged into one leading to wrong search results. Most of the time what you may want to use is Nested Datatype over Object.
 
-- Let's create `RoleRequired` attribute. So to creat custom authoriza attribute then implement the `TypeFilterAttribute` and pass the type of Iauthorization filter so below :
-
-  ![image](https://github.com/jil1710/readmedemo/assets/125335932/df8575e5-7195-4e32-a9e7-dee4c6bfffb9)
-
-- Now use `RoleRequired` Attribute if user has claim that we are passing in constructor then they get access  to the resource.
-
-  ![image](https://github.com/jil1710/readmedemo/assets/125335932/7ce01381-2ad5-4d38-b1f9-6548a1b6f89c)
-
-- Click here to see the example : [Custom Authorize Attribute](https://github.com/jil1710/Authentication-Authorization/tree/master/CustomAuthorizeAttribute)
-
-# Using Identity Server
-
-- Identity Server4 is an open-source authentication provider with OpenID connect and OAuth2.0 framework for ASP.NET Core. It acts as a centralized authentication provider or security token server (STS). It will be ideal to go through layers when you have multiple API/microservices applications and you should have single security token server to handle the authentication so that you really don’t have to define the Authentication in each and every application.   
-
-- Identity server4 is a simple and straightforward STS. The user uses the clients (ASP.NET MVC or angular or react application and so on) to access the data, these users are authenticated by Identity Server to use the client. After successful authentication, the Identity server will send a token to client. Then client should use this token to access the data from the APIs. 
-
-- The identityServer4 is the implementation of OpenID Connect and OAuth 2.0 to secure mobile, native and web applications. It acts as a middleware and a single source where you can integrate with multiple application to frame the authentication layer to secure your applications.
-
-- **Let's Implement IdentityServer4**
-
-  - Create ASP.NET Core Project with IdentityServer 4 and Install below nuget package.
-    ```csharp
-        Install-Package IdentityServer4
-    ```
-
-  - **Adding in-memory configuration**
- 
-    **1. Identity Resource :** The data like UserId, phone number, email which has something unique to a particular identity/user are the Identity Resource. Add the following code to IdentityConfigration class.
-
-    ![image](https://github.com/jil1710/readmedemo/assets/125335932/8e9c0eb6-2f0e-4f46-aa15-437da215f295)
-
-    **2. Add API Resource :** Let’s define the API Resource with Scopes and API Secrets. Ensure to hash this secret code. This secret hashed code will be saved internal within IdentityServer4..
-
-    ![image](https://github.com/jil1710/readmedemo/assets/125335932/f64b53b8-75e6-475a-a55d-05302c5e0b1e)
-
-    **3. Add Clients :** Let’s define the clients by giving proper clientId and name. We also have to define who will be granted access to our protected resource. In our case it is GetProduct. Add following code to IdentityConfigration class.
-
-    ![image](https://github.com/jil1710/readmedemo/assets/125335932/5eb0dbf4-dcb0-4327-a07d-9456bae2153d)
-
-    **4. Registering IdentityServer4 in ASP.NET Core :**
-
-    ![image](https://github.com/jil1710/readmedemo/assets/125335932/c6236ad2-b86f-48c3-bb18-2b3312929bc4)
-
-    **5. Add Identity Server Middle**
-
-    ![image](https://github.com/jil1710/readmedemo/assets/125335932/514af3dc-189f-4695-a390-ed5b4c5bde0e)
+  ![image](https://github.com/jil1710/readmedemo/assets/125335932/7b072896-ef01-4d7a-9d4e-2c09cfe6fa6c)
 
 
-- **Now Setup the Client Side and redirect to authentication page of IdentityServer4.**
+- Geo Point
 
-  - **Install below nuget package**
-    ```csharp
-        Microsoft.AspNetCore.Authentication.OpenIdConnect
-    ```
+    This data type is used to store geographical location. It accepts latitude and longitude pair. To give an example, this data type can be used to arrange the user’s photo library by their geographical location or graphically display the locations which are trending on social media news.
 
-  - After that register OpenIdConnect in program.cs file
+- Geo Shape
 
-    ![image](https://github.com/jil1710/readmedemo/assets/125335932/bcd29e8f-a2bc-437d-96d7-481d48a8ef71)
+    It allows storing arbitrary geometric shapes like rectangle, polygon.
 
-    - Aurthority : our identity server url.
-    - client id : add client which we created in identityserver configuration.
-    - secret key : add secret key which we created in identityserver configuration.
-    - save token : to save the access token in client side cookie.
+- Below is the Scheme or Mapping of ablove data type
+
+- **Example : Look below index :**
+
+  ![image](https://github.com/jil1710/readmedemo/assets/125335932/1df890d9-d4d3-4a36-a166-878c9bc91d90)
+
+  ![image](https://github.com/jil1710/readmedemo/assets/125335932/41ef854a-d683-4b67-a1d4-200300b2ed31)
+
+
+## Let's implement Elastic Search using ASP.Net Core integration
+
+
+
+
+
    
-  - After that create aurthorize route and try to hit that route it will redirect to identity server login after authenticated and in back channel it will generating the token and redirect to that secret authorize page.
-
-    ![image](https://github.com/jil1710/readmedemo/assets/125335932/872ae9cc-ffa6-42c1-853e-a3fc7e69eefd)
-
-  - Output :
-
-    - See the below image and also the url when we hit secret tab then it will redirect to identity server if we are already authenticated then it show the authorize page.
-      
-        ![image](https://github.com/jil1710/readmedemo/assets/125335932/08a193cb-39d9-4c10-85d8-a2a84058fdce)
- 
-    - After entering the valid credential and hit the login button then it will authenticate successfull and then redirect back to secret authoriza page.
-
-        ![image](https://github.com/jil1710/readmedemo/assets/125335932/c99aab6a-bb37-4bda-9cc2-df33b8f7e05d)
-
-        ![image](https://github.com/jil1710/readmedemo/assets/125335932/7d9a1c7e-9a6f-4e8f-a863-6502b366ddad)
-
-- Click here to see the example : [Client Side Code](https://github.com/jil1710/Authentication-Authorization/tree/master/Client_MVC)
-
-- Click here to see the example : [Identity Server Code](https://github.com/jil1710/Authentication-Authorization/tree/master/OpenIdServer)
- 
-
-
-
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-
 
