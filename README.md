@@ -151,9 +151,48 @@
 
  - We have Seed 300000 Customer data into Elastic Search to analysing and visulization of data we use kibana. It is a dashboard for practicing the elastic search such as create, delete index, mapping the index with type, insert, delete, update, read the document into particular index etc...
 
- - You can download kibana from [here](https://www.elastic.co/downloads/kibana). Once you download kibana zip file, extract it and run `\bin\kibana.bat`. After running this file it will give url to open dashboard once you click on this url it will ask for `enrollment token`. You get this token when you run `elasticsearch.bat` file below username nad password section..
+ - You can download kibana from [here](https://www.elastic.co/downloads/kibana). Once you download kibana zip file, extract it and run `\bin\kibana.bat`. After running this file it will give url to open dashboard once you click on this url it will ask for `enrollment token`. You get this token when you run `elasticsearch.bat` file below username nad password section. Just copy and paste into kibana dashboard after validation token it will ask for username and password. enter same below username and password. now you are ready to go. Go to `Dev Tool` to execute end points like create, delete, get etc..
 
    ![image](https://github.com/jil1710/readmedemo/assets/125335932/5771f18f-9fe3-43e3-9380-9d5c643636ac)
+
+- **Search Customer by it's name into customer index**
+
+  ![image](https://github.com/jil1710/readmedemo/assets/125335932/03748038-a0fe-4cd8-865e-6bc0ff9cf7b2)
+
+- **Search Customer by Account Type [ Saving, Fixed, Current ]**
+
+  ![image](https://github.com/jil1710/readmedemo/assets/125335932/92ca6354-b205-4737-a9df-ead806aaedf9)
+
+ - **Let's Perform CRUD operation on elastic search index**
+
+   - Create model CRUD
+
+     ![image](https://github.com/jil1710/readmedemo/assets/125335932/0607f2e9-69ce-4c27-bc99-be01ca682fe4)
+
+   - Insert data document into elastic search index with name crud.
+
+     ![image](https://github.com/jil1710/readmedemo/assets/125335932/98eeed94-e5a7-47b1-97f1-b527b580ca31)
+
+   - Delete document from crud index
+  
+     ![image](https://github.com/jil1710/readmedemo/assets/125335932/b3227ac7-f0d9-4b78-84f8-46ce01865c18)
+
+   - Update document of crud index
+  
+     ![image](https://github.com/jil1710/readmedemo/assets/125335932/a3b28d1f-6ec8-46c1-aaa2-90d35846174b)
+
+   - Read document by id from crud index
+
+     ![image](https://github.com/jil1710/readmedemo/assets/125335932/2079b872-4e6f-4677-9131-c86ade053745)
+
+
+
+  
+     
+
+
+
+
 
 
 
