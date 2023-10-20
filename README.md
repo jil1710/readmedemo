@@ -9,6 +9,20 @@
 - It is easy to set up out of the box since it ships with sensible defaults and hides complexity from beginners. It has a short learning curve to grasp the basics so anyone with a bit of efforts can become productive very quickly. It is schema-less, using some defaults to index the data.
 
 - It is built in Java. Easy to use and highly scalable. Often used to provide search functionality to an application with features like auto complete, correcting typos, handling synonyms, logging etc...
+
+## Key Features of ElasticSearch
+
+ - **Distributed Architecture:** ElasticSearch is built to distribute data across multiple nodes, enabling horizontal scalability and high availability. It uses sharding and replication techniques to ensure data is distributed and replicated across the cluster.
+   
+ - **Full-Text Search:** ElasticSearch provides robust full-text search capabilities, allowing you to perform complex search queries across structured and unstructured data. It supports features like filtering, faceting, highlighting, and relevance scoring.
+
+ - **Real-Time Data:** ElasticSearch is designed to handle real-time data ingestion and analytics. It allows you to index and search data in near real-time, making it suitable for applications that require up-to-date information and quick responses.
+
+ - **Schema-less:** ElasticSearch is schema-less, meaning you can index and search documents without predefining a strict schema. It dynamically maps and indexes data based on its structure, which provides flexibility and simplifies the data indexing process.
+
+ - **RESTful API:** ElasticSearch exposes a comprehensive RESTful API, allowing you to interact with the search engine using HTTP requests. This makes it easy to integrate ElasticSearch into various applications and programming languages.
+
+ - **Aggregations and Analytics:** ElasticSearch offers powerful aggregation capabilities for performing data analytics and generating meaningful insights. Aggregations allow you to group, filter, and perform calculations on data sets, enabling you to extract valuable information from your indexed documents.
  
 ## Let's Understand Component and Terminology of Elastic search
 
@@ -105,7 +119,44 @@
   ![image](https://github.com/jil1710/readmedemo/assets/125335932/41ef854a-d683-4b67-a1d4-200300b2ed31)
 
 
-## Let's implement Elastic Search using ASP.Net Core integration
+## Let's implement Elastic Search using ASP.Net Core integration.
+
+- First of all Download and Install Elasticsearch. You can download it from [here](https://www.elastic.co/downloads/elasticsearch). Once you downloaded Elasticsearch zip file, extract it and run `\bin\elasticsearch.bat`. After running this file, you should be able to browse https://localhost:9200. You can use this as your Elasticsearch server. You will also get your username, password, and other necessary information that you have to use in ASP.NET Core middleware.
+
+  ![image](https://github.com/jil1710/readmedemo/assets/125335932/5771f18f-9fe3-43e3-9380-9d5c643636ac)
+
+- Now Install the below nuget package in order to cummunicate with elastic search server. Nest is a strongly typed interface to Elasticsearch. Fluent and classic object initializer mappings of requests and responses.
+
+  ```csharp
+     NEST
+  ```
+
+- Now Add Elastic Search Configuration or Add Elastic Search Services into dependency injection.
+
+  ```json
+   "ElasticSearchSettings": {
+      "Uri": "https://localhost:9200/",
+      "Username": "elastic",
+      "Password": "j0Mx4ld2g+owizkbDxJo",
+      "Thumbprint": "b2ae7dabf9881172d776d8e189ac67ef2a2021fe91df6634c99b6d60cc2d072e"
+    }
+  ```
+  - Create one extention method that configure the elastic search setting and connection to create index and document.
+ 
+    ![image](https://github.com/jil1710/readmedemo/assets/125335932/63fc3cdf-ac18-4d3f-bc5a-c0df3f5d148b)
+
+  - Add this to Service collection to register the `IElasticClient` into DI container.
+ 
+    ![image](https://github.com/jil1710/readmedemo/assets/125335932/a6b64282-3054-44bb-8f88-abfa691e0165)
+
+ - We have Seed 300000 Customer data into Elastic Search to analysing and visulization of data we use kibana. It is a dashboard for practicing the elastic search such as create, delete index, mapping the index with type, insert, delete, update, read the document into particular index etc...
+
+ - You can download kibana from [here](https://www.elastic.co/downloads/kibana). Once you download kibana zip file, extract it and run `\bin\kibana.bat`. After running this file it will give url to open dashboard once you click on this url it will ask for `enrollment token`. You get this token when you run `elasticsearch.bat` file below username nad password section..
+
+   ![image](https://github.com/jil1710/readmedemo/assets/125335932/5771f18f-9fe3-43e3-9380-9d5c643636ac)
+
+
+
 
 
 
