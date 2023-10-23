@@ -249,6 +249,137 @@
        Since, non-clustered indexes are stored at a separate location than the original table, non-clustered indexes consume additional disk space. If disk space is a problem, use a clustered index.
 
 
+# Execution Plan caching
+
+- Whenever a query is run for the first time in SQL Server, it is compiled and a query plan is generated for the query. Every query requires a query plan before it is actually executed. This query plan is stored in SQL Server query plan cache. This way when that query is run again, SQL Server doesn’t need to create another query plan; rather it uses the cached query plan which improved database performance.
+
+- The duration that a query plan stays in the plan cache depends upon how often a query is executed. Query plans that are used more often, stay in the query plan cache for longer durations, and vice-versa.
+
+- Now somehow, if we ensure that the first two steps (i.e. Syntax Checked and Plan Selected) are executed only once, would not it be great. In other words, the first time the SQL is executed, the syntaxes are checked, the execution plan is selected and the execution plan is cached in memory. So, if the same SQL statements are fired again, then these two steps are not going to be executed, rather the execution plan is taken from the cache and executed and that will definitely increase the performance of the application which is shown in the below image.
+
+  ![image](https://github.com/jil1710/readmedemo/assets/125335932/c966463a-d81e-4165-b0de-fd3e32ecedac)
+
+
+- **How to view the SQL Server query plan cache**
+
+- SQL Server provides the following dynamic management views and functions that can be used to find out what is in the plan cache at any given time.
+
+  - sys.dm_exec_cached_plans
+  - sys.dm_exec_sql_text
+  - sys.dm_exec_query_plan
+
+ - Let us use these functions and views to see what is in the SQL Server cached query plan. Execute the following query on your SSMS (SQL Server Management Studio):
+
+   ![image](https://github.com/jil1710/readmedemo/assets/125335932/cff92b5e-acff-4cd2-9945-8093fa3163b0)
+
+   ![image](https://github.com/jil1710/readmedemo/assets/125335932/1c951a6b-4f20-4c89-9147-9c602a26bfa8)
+
+ - Here the usecount column contains a count for the number of times a query has been executed. The objtype column contains information about the object through which a query is executed. It is important to mention that up till SQL Server 6.5 only stored procedure queries were stored in the cached plan. From SQL Server 7.0 onwards, dynamic and ad-hoc queries are also stored in the cached plan. The text column contains the text of the query and finally, the query_plan column contains the XML representation of the query. Click any row in the query_plan column to see the detailed XML representation of the plan.
+
+ - **Clearing the plan cache**
+
+   - To clear the plan cache, execute the following:
+     ```sql
+       DBCC FREEPROCCACHE
+     ```
+
+  - **Undestand Stored procedure query plan**
+
+     - Now let’s execute a simple stored procedure and see what we get in our SQL Server query plan cache. First let’s create a dummy database and a table inside that database:
+
+       ![image](https://github.com/jil1710/readmedemo/assets/125335932/455f0341-8705-4c8f-b840-1fa2109fdee7)
+
+       ![image](https://github.com/jil1710/readmedemo/assets/125335932/68825b03-ff3e-46b7-bb30-b89ddf05ae01)
+
+    - Finally, let’s create a simple stored procedure that retrieves all the records from the department table of the company database:
+   
+      ![image](https://github.com/jil1710/readmedemo/assets/125335932/43f689ff-497a-431f-a0ca-98b5473f402e)
+
+    - Now, execute the newly created getdepartment stored procedure:
+      ```sql
+       exec getdepartment
+      ```
+
+    - Once the stored procedure is executed, try to retrieve the information about all the query plans in the plan cache, again execute the following query:
+
+      ![image](https://github.com/jil1710/readmedemo/assets/125335932/06d96756-a4d1-4ef0-b653-379184523f85)
+   
+    - When the above query is executed, you will see that two query plans will be retrieved: One query plan for the stored procedure and the other for the query that retrieves the query plan. The output looks like this:
+
+      ![image](https://github.com/jil1710/readmedemo/assets/125335932/ee7bcccb-60b1-42da-bb85-45e255ffaade)
+
+    - In the first row, you can see the object type Proc. This refers to the stored procedure query plan that we just executed. Inside the text column, you can also see the information about the stored procedure and the actual query that we executed inside the stored procedure. Here the usecount column displays the number of times query is executed. Execute the stored procedure once more and then retrieve the query plan cache, and you will see following results:
+   
+      ![image](https://github.com/jil1710/readmedemo/assets/125335932/4450abce-55f1-4080-94b1-d9cf5d473f83)
+
+   - The Stored Procedures are pre-compiled and their execution plan is cached and used again when the same stored procedure is executed again. The Stored Procedure reduces network traffic. When we execute a stored procedure we need to send the procedure name and parameters so only these things are passed on the network but if we are not using the stored procedure then we need to write the ad-hoc queries and we need to execute them which may contain many numbers of lines. So the stored procedure reduces the network traffic as a result performance of the application increase.
+
+
+- **The query plan depends upon the query text**
+
+  - SQL Server generates a query plan using a hash value that is calculated from the query text. When a query is run, SQL Server calculates its hash value and checks if a plan with the same hash value exists in the plan cache. If a plan with same hash value exists, that plan is executed. However, if a plan with the newly calculated hash value doesn’t exist, a new query plan is generated and stored in the cache plan.
+
+  - The hash value for the query plan is generated from the text. Therefore if there is even a slight change in the query text (e.g. a change of case, comma or space) a new hash value will be generated and thus a new query plan. Let’s see an example of this.
+ 
+    Clear the query plan cache and execute the following query twice:
+    ```sql
+      SELECT * FROM department where dep_name = 'Sales'
+    ```
+
+  - When you retrieve the query plan cache, you can see that usecount for the Adhoc query that we just executed twice is 2:
+
+    ![image](https://github.com/jil1710/readmedemo/assets/125335932/a2604dea-17be-4d65-af85-74879050337b)
+
+    - Now let’s make a slight change to our query:
+      ```sql
+       SELECT * FROM department Where dep_name = 'Sales'
+      ```
+
+    - Here we have replaced small case w of the where clause from the previous query to capital case W. This is a minor change, but when the above query is executed a new hash value is calculated and hence a new query plan is generated for the query. If you look at the query cash plan now, you will see following output:
+   
+      ![image](https://github.com/jil1710/readmedemo/assets/125335932/4afb2999-3149-47cc-946a-fedca6f213d2)
+
+
+- **Review of Execution Plan Reuse**
+
+  - SQL query optimization is both a resource and time intensive process. An execution plan provides SQL Server with instructions on how to efficiently execute a query and must be available prior to execution and is the product of the query optimization process whenever a query is executed.
+  
+  - Because it takes significant resources to generate an execution plan, SQL Server caches plans in memory in the query plan cache for later use. If the same query is executed multiple times, then the cached plan can be reused over and over, without the need to generate a new plan. This saves time and resources, especially for common queries that are executed frequently.
+  
+  - Execution plans are cached based on the exact text of the query. Any differences, even those as minor as a comment or capital letter, will result in a separate plan being generated and cached. Consider the following two queries:
+
+    ![image](https://github.com/jil1710/readmedemo/assets/125335932/69efe4be-98f6-4cbc-9e86-7a3452cda0d2)
+
+  - While the queries are very similar and will likely require the same execution plan, SQL Server will create a separate plan for each. This is because the filter is different, with the OrderDate being May 30th in the first query and May 31st in the second query. As a result, hard-coded literals in queries will result in different execution plans for each different value that is used in the query. If I ran the query above once for every day in the year 2011, then the result would be 365 queries and 365 different cached execution plans.
+
+ - If the queries above are executed very often, then SQL Server will be forced to generate new plans frequently for all possible values of OrderDate. If OrderDate is a DATETIME and can (and will) have lots of distinct values, then we’ll see a very large number of execution plans getting created at a rapid pace.
+
+ - The plan cache is stored in memory and its size is limited by available memory. Therefore, if excessive numbers of plans are generated over a short period of time, the plan cache could fill up. When this occurs, older plans are removed from cache in favor of newer ones. If memory pressure becomes significant, then the older plans being removed may end up being useful ones that we will need soon.
+
+ - The solution to memory pressure in the plan cache is `Parameterization`. For our query above, the DATETIME literal can be replaced with a parameter:
+
+   ![image](https://github.com/jil1710/readmedemo/assets/125335932/a34bed61-384d-4770-a92b-53c9b9c6dd18)
+
+ - When executed for the first time, an execution plan will be generated for this stored procedure that uses the parameter @order_date. All subsequent executions will use the same execution plan, resulting in the need for only a single plan, even if the proc is executed millions of times per day.
+
+ - Parameterization greatly reduces churn in the plan cache and speeds up query execution as we can often skip the expensive optimization process that is needed to generate an execution plan.
+
+
+
+
+
+
+
+
+
+
+
+     
+
+
+
+
+
 
 
 
