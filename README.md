@@ -365,6 +365,42 @@
  - Parameterization greatly reduces churn in the plan cache and speeds up query execution as we can often skip the expensive optimization process that is needed to generate an execution plan.
 
 
+### Data caching
+
+- Data caching in SQL Server is a technique used to improve the performance of database queries by temporarily storing frequently accessed data in memory. This can help reduce the need to retrieve data from the disk, which is slower than accessing data from memory. Caching data in SQL Server is particularly important in applications with a high volume of read operations, as it can significantly reduce query response times.
+
+- **Buffer Pool:** SQL Server uses a buffer pool to cache data pages in memory. When data is read from the database, it is stored in memory in the buffer pool. Subsequent reads of the same data can be satisfied from the buffer pool, reducing disk I/O. SQL Server manages this caching automatically.
+
+- **Query Plan Cache:** SQL Server caches execution plans for frequently executed queries. When a query is executed, SQL Server checks if a cached plan exists for that query, and if it does, it can reuse the plan rather than recompiling it. This is called plan caching and helps save CPU and memory resources.
+
+  ```sql
+    -- First execution, the plan is compiled and cached
+    SELECT * FROM Employees WHERE EmployeeID = 101
+
+    -- Second execution uses the cached plan
+    SELECT * FROM Employees WHERE EmployeeID = 101
+  ```
+
+- **Indexed Views:** You can create indexed views in SQL Server, which are materialized views that store the result of a query. These views are precomputed and can improve query performance, especially for aggregate queries.
+
+  ```sql
+     CREATE VIEW SalesSummary
+     WITH SCHEMABINDING
+     AS
+     SELECT ProductID, SUM(SalesAmount) AS TotalSales
+     FROM Sales
+     GROUP BY ProductID;
+     
+     CREATE UNIQUE CLUSTERED INDEX IX_SalesSummary_ProductID
+     ON SalesSummary (ProductID);
+
+  ```
+
+- **Use of Indexes:** Properly designed indexes can act as a form of data caching. They help reduce the need for full table scans by allowing SQL Server to quickly locate and retrieve specific rows of data.
+
+- **Caching at the Application Layer:** In addition to caching within SQL Server, you can implement caching at the application layer. Tools like Redis or Memcached can be used to store frequently accessed data, reducing the load on the database server.
+
+
 
 
 
