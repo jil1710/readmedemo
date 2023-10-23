@@ -175,6 +175,81 @@
 
       ![image](https://github.com/jil1710/readmedemo/assets/125335932/83f006c2-765d-4fb2-9fe3-641114dc9eb3)
 
+  - **Clustered Index in Sql Server :** The Clustered Index in SQL Server defines the order in which the data is physically stored in a table. That is the leaf node (Ref to the B-Tree Structure diagram) stores the actual data. As the leaf nodes store the actual data, a table can have only one clustered index. The Clustered Index by default was created when we created the primary key constraint for that table. That means the primary key column creates a clustered index by default.
+
+    - When a table has a clustered index then the table is called a clustered table. If a table has no clustered index, its data rows are stored in an unordered structure.
+   
+    - **Default Clustered Indexes**
+
+      - Let’s create a dummy table with primary key column to see the default clustered index. Execute the following script:
+      ```sql
+         CREATE DATABASE Hospital
+
+         CREATE TABLE Patients
+         (
+         id INT PRIMARY KEY,
+         name VARCHAR(50) NOT NULL,
+         gender VARCHAR(50) NOT NULL,
+         age INT NOT NULL
+         )
+      ```
+      - The above script creates a dummy database Hospital. The database has 4 columns: id, name, gender, age. The id column is the primary key column. When the above script is executed, a clustered index is automatically created on the id column. To see all the indexes in a table, you can use the “sp_helpindex” stored procedure.
+        ```sql
+          EXECUTE sp_helpindex Patients
+        ```
+
+        ![image](https://github.com/jil1710/readmedemo/assets/125335932/cab929bb-2d14-4ff8-8933-5870a2c059e7)
+
+      - You can see the index name, description and the column on which the index is created. If you add a new record to the Patients table, it will be stored in ascending order of the value in the id column. If the first record you insert in the table has an id of three, the record will be stored in the third row instead of the first row since clustered index maintains physical order.
+
+     - **Custom Clustered Indexes :** You can create your own clustered indexes. However, before you can do that you have to create the existing clustered index. We have one clustered index due to primary key column. If we remove the primary key constraint, the default cluster will be removed. The following script removes the primary key constraint.
+
+       ```sql
+           ALTER TABLE Patients
+           DROP CONSTRAINT PK__Patients__3213E83F3DFAFAAD
+           GO
+       ```
+
+       - The following script creates a custom index “IX_tblPatient_Age” on the age column of the Patients table. Owing to this index, all the records in the Patients table will be stored in ascending order of the age.
+
+         ```sql
+            CREATE CLUSTERED INDEX IX_tblPatient_Age ON Patients(age ASC)
+         ```
+
+       - Now insert data into `Paitents` table
+         ```sql
+           INSERT INTO Patients 
+           VALUES
+           (1, 'Sara', 'Female', 34),
+           (2, 'Jon', 'Male', 20),
+           (3, 'Mike', 'Male', 54),
+           (4, 'Ana', 'Female', 10),
+           (5, 'Nick', 'Female', 29)
+         ```
+         - In the above script, we add 5 dummy records. Notice the values for the age column. They have random values and are not in any logical order. However, since we have created a clustered index, the records will be actually inserted in the ascending order of the value in the age column. You can verify this by selecting all the records from the Patients table.
+
+           ![image](https://github.com/jil1710/readmedemo/assets/125335932/2139388f-c537-4c76-9394-23104c8361a3)
+
+   - **When to Use Clustered or Non-Clustered Indexes**
+
+     - Number of Indexes
+
+       This is pretty obvious. If you need to create multiple indexes on your database, go for non-clustered index since there can be only one clustered index.
+
+     - SELECT Operations
+
+       If you want to select only the index value that is used to create and index, non-clustered indexes are faster. For example, if you have created an index on the “name” column and you want to select only the name, non-clustered indexes will quickly return the name. However, if you want to select other column values such as age, gender using the name index, the SELECT operation will be slower since first the name will be searched from the index and then the reference to the actual table record will be used to search the age and gender. On the other hand, with clustered indexes since all the records are already sorted, the SELECT operation is faster if the data is being selected from columns other than the column with clustered index.
+
+     - INSERT/UPDATE Operations
+
+       The INSERT and UPDATE operations are faster with non-clustered indexes since the actual records are not required to be sorted when an INSERT or UPDATE operation is performed. Rather only the non-clustered index needs updating.
+
+     - Disk Space
+       
+       Since, non-clustered indexes are stored at a separate location than the original table, non-clustered indexes consume additional disk space. If disk space is a problem, use a clustered index.
+
+
+
 
 
 
